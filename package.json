@@ -1,0 +1,23 @@
+{
+  "name": "chaekitta-landing",
+  "version": "1.0.0",
+  "description": "책잇다 (Chaekitta) - AI-powered reading companion landing page",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"No tests configured\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dupong00/chaekitta-landing.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dupong00/chaekitta-landing/issues"
+  },
+  "homepage": "https://github.com/dupong00/chaekitta-landing#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
