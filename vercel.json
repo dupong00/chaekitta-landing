@@ -16,8 +16,8 @@
       "permanent": false
     },
     {
-      "source": "/dc",
-      "destination": "/?utm_source=discuss&utm_medium=community&utm_campaign=beta",
+      "source": "/dq",
+      "destination": "/?utm_source=disquiet&utm_medium=community&utm_campaign=beta",
       "permanent": false
     }
   ]
