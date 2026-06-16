@@ -19,6 +19,11 @@
       "source": "/dq",
       "destination": "/?utm_source=disquiet&utm_medium=community&utm_campaign=beta",
       "permanent": false
+    },
+    {
+      "source": "/e",
+      "destination": "/?utm_source=everytime&utm_medium=community&utm_campaign=beta",
+      "permanent": false
     }
   ]
 }
