@@ -301,6 +301,71 @@
       body { align-items: flex-start; justify-content: flex-start; background: var(--bg); }
       .shell { width: 100vw; height: 100dvh; border-radius: 0; border: none; box-shadow: none; }
     }
+
+    /* ── S6: Note Library ── */
+    #s6 { background: var(--bg); }
+    .note-lib-head { padding: 16px 20px 10px; flex-shrink: 0; }
+    .note-lib-title { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+    .note-lib-stats-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+    .note-lib-stat { background: rgba(255,255,255,0.06); border: 1px solid var(--border); border-radius: 100px; padding: 4px 12px; font-size: 11px; color: var(--dim); }
+    .note-lib-stat strong { color: #60a5fa; }
+
+    .review-today-card { margin: 0 16px 14px; background: rgba(250,204,21,0.07); border: 1.5px solid rgba(250,204,21,0.22); border-radius: 16px; padding: 14px 16px; flex-shrink: 0; cursor: pointer; transition: border-color .2s; }
+    .review-today-card:hover { border-color: rgba(250,204,21,0.45); }
+    .rtc-lbl { font-size: 10px; font-weight: 700; color: #fbbf24; letter-spacing: 0.8px; margin-bottom: 7px; }
+    .rtc-book { font-size: 11px; color: rgba(255,255,255,0.38); margin-bottom: 5px; }
+    .rtc-quote { font-size: 14px; color: rgba(255,255,255,0.82); line-height: 1.55; font-style: italic; }
+    .rtc-cta { margin-top: 9px; font-size: 12px; color: #fbbf24; font-weight: 600; }
+
+    /* Book Sections */
+    .book-section { margin: 0 16px 12px; }
+    .bs-header { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 14px; cursor: pointer; user-select: none; transition: background .18s; }
+    .bs-header:hover { background: rgba(255,255,255,0.07); }
+    .bsh-cover { width: 40px; height: 52px; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 2px 3px 10px rgba(0,0,0,0.4); }
+    .bsh-cover.atomic { background: linear-gradient(150deg, #2563eb, #1e40af); }
+    .bsh-cover.power  { background: linear-gradient(150deg, #7c3aed, #4c1d95); }
+    .bsh-info { flex: 1; min-width: 0; }
+    .bsh-name { font-size: 14px; font-weight: 700; color: #fff; }
+    .bsh-author { font-size: 11px; color: var(--dim); margin-top: 2px; }
+    .bsh-badge { font-size: 11px; font-weight: 600; color: #60a5fa; flex-shrink: 0; }
+    .bsh-badge.empty { color: var(--dim); }
+    .bsh-chevron { font-size: 16px; color: var(--dim); transition: transform 0.3s cubic-bezier(.4,0,.2,1); flex-shrink: 0; line-height: 1; }
+    .bs-header.open .bsh-chevron { transform: rotate(90deg); }
+
+    /* Accordion body */
+    .bs-body { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s ease; opacity: 0; }
+    .bs-body.open { max-height: 700px; opacity: 1; }
+    .bsh-progress { height: 2px; background: rgba(255,255,255,0.07); border-radius: 100px; margin: 10px 14px 14px; }
+    .bsh-prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+
+    /* Timeline */
+    .note-timeline { padding-left: 16px; border-left: 1.5px solid rgba(37,99,235,0.25); margin: 0 14px 10px 21px; }
+    .nt-item { position: relative; padding: 0 0 16px 14px; cursor: pointer; }
+    .nt-item:last-child { padding-bottom: 4px; }
+    .nt-dot { position: absolute; left: -5px; top: 5px; width: 8px; height: 8px; border-radius: 50%; background: #3b82f6; border: 1.5px solid var(--bg); transition: background .18s; }
+    .nt-item.open .nt-dot { background: #60a5fa; }
+    .nt-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 0; }
+    .nt-ch { font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.82); flex: 1; min-width: 0; }
+    .nt-date { font-size: 11px; color: var(--dim); flex-shrink: 0; }
+    .nt-arr { font-size: 12px; color: var(--dim); transition: transform 0.25s; display: inline-block; flex-shrink: 0; }
+    .nt-item.open .nt-arr { transform: rotate(90deg); }
+
+    /* Expandable detail */
+    .nt-detail { max-height: 0; overflow: hidden; transition: max-height 0.3s cubic-bezier(.4,0,.2,1), opacity 0.25s ease; opacity: 0; }
+    .nt-item.open .nt-detail { max-height: 150px; opacity: 1; }
+    .nt-insight { font-size: 12.5px; color: rgba(255,255,255,0.5); font-style: italic; line-height: 1.55; margin: 7px 0 6px; }
+    .nt-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+    .nt-tag { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.25); color: #93c5fd; font-size: 10px; padding: 2px 7px; border-radius: 100px; }
+
+    /* Empty state */
+    .bs-empty { font-size: 12px; color: var(--dim); padding: 10px 14px 14px 14px; line-height: 1.8; }
+    .bs-empty span { color: #60a5fa; cursor: pointer; }
+
+    .bottom-tabs { display: flex; background: rgba(15,23,42,0.96); border-top: 1px solid var(--border); flex-shrink: 0; }
+    .btab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 9px 0 13px; border: none; background: transparent; cursor: pointer; transition: all .18s; font-family: inherit; }
+    .btab-icon { font-size: 20px; }
+    .btab-lbl { font-size: 10px; font-weight: 700; color: var(--dim); transition: color .18s; }
+    .btab.active .btab-lbl { color: #60a5fa; }
   </style>
 </head>
 <body>
@@ -360,6 +425,16 @@
           </div>
         </div>
         <div class="shelf-hint"><span>아토믹 해빗</span>을 탭해서<br>뽀모도로 읽기를 시작해보세요</div>
+      </div>
+      <div class="bottom-tabs">
+        <button class="btab active" onclick="void(0)">
+          <div class="btab-icon">📚</div>
+          <div class="btab-lbl">책장</div>
+        </button>
+        <button class="btab" onclick="goTo(6)">
+          <div class="btab-icon">📝</div>
+          <div class="btab-lbl">노트</div>
+        </button>
       </div>
     </div>
 
@@ -520,7 +595,123 @@
       </div>
       <div class="note-actions">
         <a class="act-pri" href="index.html#cta">📚 책잇다 베타 신청하기</a>
+        <button class="ghost-btn" onclick="goTo(6)" style="color:rgba(255,255,255,0.65);border-color:rgba(255,255,255,0.15);">📝 노트 전체 보기 →</button>
         <button class="ghost-btn" onclick="resetAll()">↺ 처음부터 다시 체험</button>
+      </div>
+    </div>
+
+    <!-- S6: Note Library -->
+    <div class="screen out-right" id="s6">
+      <div class="note-lib-head">
+        <div class="note-lib-title">독서 노트</div>
+        <div class="note-lib-stats-row">
+          <div class="note-lib-stat">📚 <strong>2권</strong> 등록됨</div>
+          <div class="note-lib-stat">📝 <strong>3개</strong> 저장됨</div>
+          <div class="note-lib-stat">🔥 <strong>5일</strong> 연속</div>
+        </div>
+      </div>
+
+      <div class="review-today-card">
+        <div class="rtc-lbl">🔔 오늘 복습하면 좋을 노트</div>
+        <div class="rtc-book">📗 아토믹 해빗 · Ch.1 · 6일 전</div>
+        <div class="rtc-quote">"1%의 작은 개선이 1년이면 37배가 된다"</div>
+        <div class="rtc-cta">탭해서 다시 떠올리기 →</div>
+      </div>
+
+      <div class="scroll-area" style="padding-bottom:16px;">
+
+        <!-- Book: 아토믹 해빗 (기본 열림) -->
+        <div class="book-section">
+          <div class="bs-header open" onclick="toggleBook(this)">
+            <div class="bsh-cover atomic">📗</div>
+            <div class="bsh-info">
+              <div class="bsh-name">아토믹 해빗</div>
+              <div class="bsh-author">제임스 클리어</div>
+            </div>
+            <div class="bsh-badge">노트 3개</div>
+            <div class="bsh-chevron">›</div>
+          </div>
+          <div class="bs-body open">
+            <div class="bsh-progress"><div class="bsh-prog-fill" style="width:60%"></div></div>
+            <div class="note-timeline">
+
+              <div class="nt-item open" onclick="toggleNote(this)">
+                <div class="nt-dot"></div>
+                <div class="nt-row">
+                  <span class="nt-ch">Ch.3 · 보상을 만족스럽게</span>
+                  <span class="nt-date">오늘</span>
+                  <span class="nt-arr">›</span>
+                </div>
+                <div class="nt-detail">
+                  <div class="nt-insight">"헬스장을 꾸준히 못 간 건 즉각적인 보람이 없어서였다"</div>
+                  <div class="nt-tags">
+                    <span class="nt-tag">#즉각보상</span><span class="nt-tag">#운동루틴</span><span class="nt-tag">#습관형성</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="nt-item" onclick="toggleNote(this)">
+                <div class="nt-dot"></div>
+                <div class="nt-row">
+                  <span class="nt-ch">Ch.2 · 1%의 법칙</span>
+                  <span class="nt-date">6월 12일</span>
+                  <span class="nt-arr">›</span>
+                </div>
+                <div class="nt-detail">
+                  <div class="nt-insight">"목표보다 시스템이 먼저다. 매일 운동하는 사람이 되는 게 목표보다 중요하다"</div>
+                  <div class="nt-tags">
+                    <span class="nt-tag">#시스템</span><span class="nt-tag">#정체성</span><span class="nt-tag">#습관형성</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="nt-item" onclick="toggleNote(this)">
+                <div class="nt-dot"></div>
+                <div class="nt-row">
+                  <span class="nt-ch">Ch.1 · 습관의 놀라운 힘</span>
+                  <span class="nt-date">6월 10일</span>
+                  <span class="nt-arr">›</span>
+                </div>
+                <div class="nt-detail">
+                  <div class="nt-insight">"운동을 꾸준히 못 했던 건 의지 문제가 아니었을 수 있겠다"</div>
+                  <div class="nt-tags">
+                    <span class="nt-tag">#습관형성</span><span class="nt-tag">#1%</span><span class="nt-tag">#복리</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Book: 초집중 (기본 닫힘) -->
+        <div class="book-section">
+          <div class="bs-header" onclick="toggleBook(this)">
+            <div class="bsh-cover power">📘</div>
+            <div class="bsh-info">
+              <div class="bsh-name">초집중</div>
+              <div class="bsh-author">니르 이얄</div>
+            </div>
+            <div class="bsh-badge empty">노트 없음</div>
+            <div class="bsh-chevron">›</div>
+          </div>
+          <div class="bs-body">
+            <div class="bsh-progress"><div class="bsh-prog-fill" style="width:0%"></div></div>
+            <div class="bs-empty">아직 저장된 노트가 없어요<br><span onclick="goTo(1)">읽기 시작하기 →</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-tabs">
+        <button class="btab" onclick="goTo(1)">
+          <div class="btab-icon">📚</div>
+          <div class="btab-lbl">책장</div>
+        </button>
+        <button class="btab active" onclick="void(0)">
+          <div class="btab-icon">📝</div>
+          <div class="btab-lbl">노트</div>
+        </button>
       </div>
     </div>
 
@@ -910,6 +1101,15 @@
     document.getElementById('suggArea').innerHTML='';
     document.getElementById('nImprove').style.display='none';
     goTo(0);
+  }
+
+  // ── Note Library Accordion ──
+  function toggleBook(header) {
+    header.classList.toggle('open');
+    header.nextElementSibling.classList.toggle('open');
+  }
+  function toggleNote(item) {
+    item.classList.toggle('open');
   }
 
   // Init
