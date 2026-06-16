@@ -7,351 +7,285 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     :root {
-      --bg: #0f172a; --card: #1e293b; --accent: #2563eb; --accent2: #3b82f6;
-      --text: rgba(255,255,255,0.92); --dim: rgba(255,255,255,0.5); --border: rgba(255,255,255,0.09);
+      --bg: #0f172a; --card: #1e293b; --accent: #2563eb;
+      --text: rgba(255,255,255,0.92); --dim: rgba(255,255,255,0.48); --border: rgba(255,255,255,0.09);
     }
     html, body { height: 100%; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
-      background: #080d1a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100%;
+      background: #080d1a; display: flex; align-items: center; justify-content: center; min-height: 100%;
       -webkit-font-smoothing: antialiased;
     }
-
-    /* Phone shell (desktop) */
     .shell {
-      width: 390px;
-      height: 844px;
-      background: var(--bg);
-      border-radius: 52px;
+      width: 390px; height: 844px; background: var(--bg); border-radius: 52px;
       border: 10px solid #1a2540;
-      box-shadow:
-        0 0 0 1.5px #2a3a60,
-        0 60px 120px rgba(0,0,0,0.7),
-        inset 0 0 0 1px rgba(255,255,255,0.04);
-      overflow: hidden;
-      position: relative;
-      display: flex;
-      flex-direction: column;
+      box-shadow: 0 0 0 1.5px #2a3a60, 0 60px 120px rgba(0,0,0,0.7), inset 0 0 0 1px rgba(255,255,255,0.04);
+      overflow: hidden; display: flex; flex-direction: column;
     }
-
-    /* Status bar */
     .sbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 28px 6px;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text);
-      flex-shrink: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 28px 6px; font-size: 12px; font-weight: 700; color: var(--text); flex-shrink: 0;
     }
-    .sbar-right { display: flex; gap: 5px; align-items: center; }
-    .sbar-dot { width: 4px; height: 4px; background: var(--text); border-radius: 50%; }
-
-    /* Screens container */
-    .screens {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-    }
+    .screens { flex: 1; position: relative; overflow: hidden; }
     .screen {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease;
-      overflow: hidden;
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      transition: transform 0.36s cubic-bezier(0.4,0,0.2,1), opacity 0.36s ease; overflow: hidden;
     }
     .screen.out-right { transform: translateX(100%); opacity: 0; pointer-events: none; }
     .screen.out-left  { transform: translateX(-28%); opacity: 0; pointer-events: none; }
 
-    /* ─── SCREEN 0: Splash ─── */
+    /* ── Shared ── */
+    .s-nav { display: flex; align-items: center; gap: 12px; padding: 12px 16px 10px; flex-shrink: 0; }
+    .nav-back {
+      width: 34px; height: 34px; background: rgba(255,255,255,0.07); border-radius: 50%;
+      border: none; color: var(--text); font-size: 15px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: background .18s;
+    }
+    .nav-back:hover { background: rgba(255,255,255,0.12); }
+    .nav-ttl { font-size: 15px; font-weight: 700; color: #fff; }
+    .big-btn {
+      width: 100%; background: var(--accent); color: #fff; padding: 16px; border: none;
+      border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer;
+      transition: all .18s; box-shadow: 0 6px 20px rgba(37,99,235,0.35);
+    }
+    .big-btn:active { transform: scale(0.97); }
+    .ghost-btn {
+      width: 100%; background: transparent; color: var(--dim); padding: 13px;
+      border: 1.5px solid var(--border); border-radius: 14px; font-size: 14px;
+      cursor: pointer; transition: all .18s; font-family: inherit;
+    }
+    .ghost-btn:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+    .scroll-area { flex: 1; overflow-y: auto; }
+    .scroll-area::-webkit-scrollbar { display: none; }
+
+    /* ── S0: Splash ── */
     #s0 {
       background: linear-gradient(160deg, #08102a 0%, #0f2060 55%, #08102a 100%);
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 32px;
-      gap: 0;
+      align-items: center; justify-content: center; text-align: center; padding: 40px 32px;
     }
-    .splash-glow {
-      position: absolute;
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(37,99,235,0.35) 0%, transparent 70%);
-      border-radius: 50%;
-    }
+    .splash-glow { position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(37,99,235,0.35) 0%, transparent 70%); border-radius: 50%; }
     .splash-logo { font-size: 52px; margin-bottom: 20px; position: relative; z-index: 1; }
     .splash-title { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -1px; margin-bottom: 10px; position: relative; z-index: 1; }
     .splash-sub { font-size: 14px; color: var(--dim); line-height: 1.65; margin-bottom: 36px; position: relative; z-index: 1; }
-    .live-badge {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: rgba(37,99,235,0.28); border: 1px solid rgba(37,99,235,0.45);
-      color: #93c5fd; font-size: 12px; font-weight: 700;
-      padding: 6px 16px; border-radius: 100px;
-      margin-bottom: 40px; position: relative; z-index: 1;
-    }
+    .live-badge { display: inline-flex; align-items: center; gap: 7px; background: rgba(37,99,235,0.28); border: 1px solid rgba(37,99,235,0.45); color: #93c5fd; font-size: 12px; font-weight: 700; padding: 6px 16px; border-radius: 100px; margin-bottom: 40px; position: relative; z-index: 1; }
     .live-dot { width: 6px; height: 6px; background: #60a5fa; border-radius: 50%; animation: ldot 2s infinite; }
-    @keyframes ldot { 0%,100%{opacity:1} 50%{opacity:0.25} }
-    .big-btn {
-      width: 100%; background: var(--accent); color: #fff;
-      padding: 17px; border: none; border-radius: 16px;
-      font-size: 16px; font-weight: 700; cursor: pointer;
-      transition: all .18s; position: relative; z-index: 1;
-      box-shadow: 0 8px 24px rgba(37,99,235,0.4);
-    }
-    .big-btn:active { transform: scale(0.97); }
-    .splash-note { font-size: 12px; color: rgba(255,255,255,0.25); margin-top: 14px; position: relative; z-index: 1; }
+    @keyframes ldot { 0%,100%{opacity:1} 50%{opacity:.25} }
+    .splash-note { font-size: 12px; color: rgba(255,255,255,0.22); margin-top: 14px; position: relative; z-index: 1; }
 
-    /* ─── SCREEN 1: Bookshelf ─── */
+    /* ── S1: Bookshelf ── */
     #s1 { background: var(--bg); }
-    .s-header { padding: 16px 20px 14px; flex-shrink: 0; }
+    .s-header { padding: 16px 20px 12px; flex-shrink: 0; }
     .s-title { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
     .s-title em { font-style: normal; color: #60a5fa; }
     .s-sub { font-size: 13px; color: var(--dim); margin-top: 4px; }
-    .shelf-section-label {
-      font-size: 10px; font-weight: 700; color: var(--dim);
-      letter-spacing: 1.2px; padding: 0 20px; margin-bottom: 10px;
-    }
+    .shelf-lbl { font-size: 10px; font-weight: 700; color: var(--dim); letter-spacing: 1.2px; padding: 0 20px; margin-bottom: 10px; }
     .book-card {
-      margin: 0 16px 10px;
-      background: var(--card);
-      border: 1.5px solid var(--border);
-      border-radius: 18px; padding: 18px;
-      display: flex; gap: 16px;
-      cursor: pointer;
-      transition: all .2s;
-      position: relative;
+      margin: 0 16px 10px; background: var(--card); border: 1.5px solid var(--border);
+      border-radius: 18px; padding: 18px; display: flex; gap: 16px; cursor: pointer;
+      transition: all .2s; position: relative;
     }
     .book-card:active { transform: scale(0.985); }
-    .book-card:hover, .book-card:active { border-color: rgba(59,130,246,0.45); }
-    .book-card-new-badge {
-      position: absolute; top: 14px; right: 14px;
-      background: #22c55e; color: #fff;
-      font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 100px;
-    }
-    .bcover {
-      width: 60px; height: 80px;
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 26px; flex-shrink: 0;
-      box-shadow: 3px 3px 12px rgba(0,0,0,0.35);
-    }
+    .book-card:hover { border-color: rgba(59,130,246,0.45); }
+    .new-badge { position: absolute; top: 14px; right: 14px; background: #22c55e; color: #fff; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+    .bcover { width: 60px; height: 80px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; box-shadow: 3px 3px 12px rgba(0,0,0,0.35); }
     .bcover.atomic { background: linear-gradient(150deg, #2563eb, #1e40af); }
-    .bcover.power { background: linear-gradient(150deg, #7c3aed, #4c1d95); }
+    .bcover.power  { background: linear-gradient(150deg, #7c3aed, #4c1d95); }
     .b-status { font-size: 10px; font-weight: 700; color: #93c5fd; margin-bottom: 6px; }
-    .b-name { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .b-name   { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 2px; }
     .b-author { font-size: 12px; color: var(--dim); margin-bottom: 10px; }
     .b-bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 100px; margin-bottom: 4px; }
     .b-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #3b82f6, #60a5fa); }
     .b-prog { font-size: 11px; color: var(--dim); }
-    .shelf-hint {
-      text-align: center; padding: 16px 20px 20px;
-      font-size: 13px; color: var(--dim); line-height: 1.6;
-    }
+    .shelf-hint { text-align: center; padding: 14px 20px 16px; font-size: 13px; color: var(--dim); line-height: 1.6; }
     .shelf-hint span { color: #60a5fa; }
 
-    /* ─── SCREEN 2: Chapter Check ─── */
+    /* ── S2: Pomodoro Timer ── */
     #s2 { background: var(--bg); }
-    .s-nav {
-      display: flex; align-items: center; gap: 12px;
-      padding: 14px 16px 10px; flex-shrink: 0;
+    .timer-book-pill {
+      margin: 0 16px 16px; background: var(--card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 14px 16px; display: flex; align-items: center; gap: 14px;
     }
-    .nav-back {
-      width: 34px; height: 34px;
-      background: rgba(255,255,255,0.07);
-      border-radius: 50%; border: none;
-      color: var(--text); font-size: 15px;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      transition: background .18s;
+    .timer-book-icon { width: 44px; height: 58px; border-radius: 7px; background: linear-gradient(150deg, #2563eb, #1e40af); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .timer-book-name { font-size: 14px; font-weight: 700; color: #fff; }
+    .timer-book-sub  { font-size: 12px; color: var(--dim); margin-top: 2px; }
+    /* Duration selector */
+    .timer-dur-row { display: flex; gap: 8px; justify-content: center; margin-bottom: 18px; padding: 0 16px; }
+    .timer-dur-btn {
+      flex: 1; padding: 8px 0; border-radius: 10px; border: 1.5px solid var(--border);
+      background: transparent; color: var(--dim); font-size: 13px; font-weight: 700;
+      cursor: pointer; transition: all .18s; font-family: inherit;
     }
-    .nav-back:hover { background: rgba(255,255,255,0.12); }
-    .nav-ttl { font-size: 15px; font-weight: 700; color: #fff; }
-    .chapter-hero {
-      margin: 4px 16px 20px;
-      background: linear-gradient(135deg, #1e3a8a, #2563eb);
-      border-radius: 20px; padding: 22px;
-      display: flex; align-items: center; gap: 16px;
+    .timer-dur-btn.active { background: rgba(37,99,235,0.22); border-color: rgba(96,165,250,0.45); color: #93c5fd; }
+    .timer-center { display: flex; flex-direction: column; align-items: center; padding: 0 20px; }
+    .pomo-dots { display: flex; gap: 8px; margin-bottom: 18px; }
+    .pomo-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.15); }
+    .pomo-dot.done { background: #3b82f6; }
+    .timer-wrap { position: relative; width: 200px; height: 200px; margin-bottom: 22px; }
+    .timer-svg { width: 200px; height: 200px; }
+    .timer-ring-bg { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 9; }
+    .timer-ring { fill: none; stroke: #3b82f6; stroke-width: 9; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+    .timer-inner { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+    .timer-lbl  { font-size: 10px; font-weight: 700; color: var(--dim); letter-spacing: 1px; }
+    .timer-disp { font-size: 42px; font-weight: 800; color: #fff; letter-spacing: -2px; font-variant-numeric: tabular-nums; }
+    .timer-sess { font-size: 11px; color: #60a5fa; }
+    .timer-btns { display: flex; gap: 10px; width: 100%; margin-bottom: 14px; }
+    .timer-main {
+      flex: 1; padding: 14px; border: none; border-radius: 14px; font-size: 15px; font-weight: 700;
+      cursor: pointer; transition: all .18s; font-family: inherit;
     }
-    .chapter-cover-sm {
-      width: 52px; height: 68px;
-      background: rgba(255,255,255,0.15);
-      border-radius: 8px; display: flex; align-items: center; justify-content: center;
-      font-size: 22px; flex-shrink: 0;
-    }
-    .ch-book { font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 2px; }
-    .ch-num { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
-    .ch-title { font-size: 16px; font-weight: 800; color: #fff; }
-    .q-box { padding: 0 16px; }
-    .q-title { font-size: 21px; font-weight: 800; color: #fff; line-height: 1.35; margin-bottom: 10px; }
-    .q-desc { font-size: 14px; color: var(--dim); line-height: 1.65; margin-bottom: 28px; }
-    .q-btns { display: flex; gap: 10px; margin-bottom: 20px; }
-    .q-yes, .q-no {
-      flex: 1; padding: 15px; border-radius: 14px;
-      font-size: 15px; font-weight: 700; cursor: pointer; transition: all .18s; border: none;
-    }
-    .q-yes { background: var(--accent); color: #fff; box-shadow: 0 4px 16px rgba(37,99,235,0.35); }
-    .q-yes:active { transform: scale(0.97); }
-    .q-no { background: rgba(255,255,255,0.07); color: var(--dim); border: 1.5px solid var(--border); }
-    .tip-card {
-      background: rgba(96,165,250,0.07);
-      border: 1px solid rgba(96,165,250,0.18);
-      border-radius: 14px; padding: 14px 16px;
-      font-size: 13px; color: var(--dim); line-height: 1.65;
-    }
-    .tip-card strong { color: #60a5fa; }
+    .timer-main.start { background: var(--accent); color: #fff; box-shadow: 0 6px 20px rgba(37,99,235,0.35); }
+    .timer-main.pause { background: rgba(255,255,255,0.09); color: var(--text); border: 1.5px solid var(--border); }
+    .timer-done { flex-shrink: 0; padding: 14px 16px; border: 1.5px solid var(--border); background: transparent; color: var(--dim); border-radius: 14px; font-size: 14px; cursor: pointer; transition: all .18s; font-family: inherit; }
+    .timer-done:hover { background: rgba(255,255,255,0.06); color: var(--text); }
+    .timer-skip { font-size: 12px; color: var(--dim); cursor: pointer; text-align: center; padding-bottom: 4px; }
+    .timer-skip:hover { color: var(--text); }
 
-    /* ─── SCREEN 3: AI Chat ─── */
+    /* ── S3: Progress Check ── */
     #s3 { background: var(--bg); }
-    .chat-header {
-      padding: 12px 16px; border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; gap: 12px; flex-shrink: 0;
-    }
-    .ai-av {
-      width: 38px; height: 38px;
-      background: linear-gradient(135deg, #2563eb, #60a5fa);
-      border-radius: 50%; display: flex; align-items: center;
-      justify-content: center; font-size: 18px; flex-shrink: 0;
-    }
-    .ai-name { font-size: 14px; font-weight: 700; color: #fff; }
-    .ai-online { font-size: 11px; color: #60a5fa; margin-top: 1px; }
-    .chat-book-pill {
-      margin-left: auto;
-      background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.3);
-      color: #93c5fd; font-size: 10px; font-weight: 700;
-      padding: 4px 10px; border-radius: 100px;
-    }
-    .chat-msgs {
-      flex: 1; overflow-y: auto; padding: 14px 14px 4px;
-      display: flex; flex-direction: column; gap: 9px;
-    }
-    .chat-msgs::-webkit-scrollbar { display: none; }
-    .cb {
-      max-width: 86%; border-radius: 16px;
-      padding: 11px 14px; font-size: 14px; line-height: 1.6;
-      animation: cbIn .28s ease;
-    }
-    @keyframes cbIn { from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none} }
-    .cb.ai {
-      background: rgba(37,99,235,0.26);
-      border: 1px solid rgba(37,99,235,0.35);
-      color: rgba(255,255,255,0.93);
-      align-self: flex-start;
-    }
-    .cb.user {
-      background: rgba(255,255,255,0.09);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.85);
-      align-self: flex-end;
-    }
-    .cb-label { font-size: 9px; font-weight: 700; opacity: 0.5; margin-bottom: 3px; letter-spacing: 0.5px; }
-    .c-typing-ind {
-      display: flex; align-items: center; gap: 4px;
-      padding: 12px 14px;
-      background: rgba(37,99,235,0.26); border: 1px solid rgba(37,99,235,0.35);
-      border-radius: 16px; align-self: flex-start;
-      animation: cbIn .28s ease;
-    }
-    .ctd { width: 6px; height: 6px; background: rgba(255,255,255,0.45); border-radius: 50%; animation: ctDot 1.2s infinite; }
-    .ctd:nth-child(2){animation-delay:.2s}.ctd:nth-child(3){animation-delay:.4s}
-    @keyframes ctDot{0%,80%,100%{transform:scale(.6);opacity:.3}40%{transform:scale(1);opacity:1}}
-    .chat-input-area {
-      padding: 10px 14px 14px;
-      display: flex; flex-direction: column; gap: 7px;
-      border-top: 1px solid var(--border); flex-shrink: 0;
-    }
-    .c-opt {
-      background: rgba(255,255,255,0.06);
-      border: 1.5px solid rgba(255,255,255,0.13);
-      color: rgba(255,255,255,0.8);
-      border-radius: 12px; padding: 10px 14px;
-      font-size: 13px; text-align: left; cursor: pointer;
-      transition: all .15s; font-family: inherit;
-    }
-    .c-opt:hover, .c-opt:active { background: rgba(37,99,235,0.3); border-color: rgba(96,165,250,0.45); color: #fff; }
-    .c-opt:disabled { opacity: 0.3; cursor: default; }
+    .prog-header { padding: 0 16px 18px; flex-shrink: 0; }
+    .prog-q { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; line-height: 1.3; }
+    .prog-sub { font-size: 14px; color: var(--dim); margin-top: 6px; }
+    .tab-row { display: flex; background: rgba(255,255,255,0.06); border-radius: 12px; padding: 3px; margin: 0 16px 18px; flex-shrink: 0; }
+    .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; transition: all .2s; background: transparent; color: var(--dim); font-family: inherit; }
+    .tab-btn.active { background: #fff; color: #111; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    .page-mode { padding: 0 16px; }
+    .page-picker { display: flex; align-items: center; justify-content: center; gap: 16px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 26px 20px; margin-bottom: 14px; }
+    .page-adj { width: 44px; height: 44px; border-radius: 50%; border: 1.5px solid var(--border); background: rgba(255,255,255,0.06); color: var(--text); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s; font-family: inherit; }
+    .page-adj:hover { background: rgba(255,255,255,0.12); }
+    .page-adj:active { transform: scale(0.9); }
+    .page-num { font-size: 52px; font-weight: 800; color: #fff; letter-spacing: -3px; min-width: 76px; text-align: center; font-variant-numeric: tabular-nums; }
+    .page-unit { font-size: 15px; color: var(--dim); text-align: center; }
+    .page-hint { font-size: 13px; color: var(--dim); text-align: center; margin-bottom: 18px; }
+    .page-hint span { color: #60a5fa; }
+    .chapter-mode { padding: 0 16px; display: none; }
+    .ch-opts { display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px; }
+    .ch-opt { display: flex; align-items: center; gap: 14px; background: var(--card); border: 1.5px solid var(--border); border-radius: 14px; padding: 14px 16px; cursor: pointer; transition: all .18s; }
+    .ch-opt.selected { border-color: #3b82f6; background: rgba(37,99,235,0.12); }
+    .ch-opt:active { transform: scale(0.985); }
+    .ch-radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .18s; }
+    .ch-opt.selected .ch-radio { border-color: #3b82f6; background: #3b82f6; }
+    .ch-radio-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; display: none; }
+    .ch-opt.selected .ch-radio-dot { display: block; }
+    .ch-num { font-size: 10px; font-weight: 700; color: var(--dim); margin-bottom: 2px; }
+    .ch-title-text { font-size: 14px; font-weight: 600; color: var(--text); }
+    .ch-opt.selected .ch-title-text { color: #fff; }
+    .ch-pages { font-size: 11px; color: var(--dim); margin-top: 2px; }
+    .confirm-wrap { padding: 0 16px 16px; flex-shrink: 0; }
 
-    /* ─── SCREEN 4: Note ─── */
-    #s4 { background: var(--bg); overflow-y: auto; }
-    #s4::-webkit-scrollbar { display: none; }
-    .note-top { text-align: center; padding: 20px 20px 16px; }
-    .note-icon { font-size: 48px; animation: notePop .5s cubic-bezier(0.34,1.56,0.64,1) both .1s; }
+    /* ── S4: Chat ── */
+    #s4 { background: var(--bg); }
+    .chat-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+    .ai-av { width: 38px; height: 38px; background: linear-gradient(135deg, #2563eb, #60a5fa); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .ai-name { font-size: 14px; font-weight: 700; color: #fff; }
+    .ai-status { font-size: 11px; color: #60a5fa; margin-top: 1px; }
+    .chat-ctx-pill { margin-left: auto; background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.3); color: #93c5fd; font-size: 10px; font-weight: 700; padding: 4px 10px; border-radius: 100px; max-width: 110px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+    .chat-msgs { flex: 1; overflow-y: auto; padding: 14px 14px 4px; display: flex; flex-direction: column; gap: 9px; }
+    .chat-msgs::-webkit-scrollbar { display: none; }
+    .cb { max-width: 86%; border-radius: 16px; padding: 11px 14px; font-size: 14px; line-height: 1.6; animation: cbIn .28s ease; }
+    @keyframes cbIn { from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none} }
+    .cb.ai { background: rgba(37,99,235,0.26); border: 1px solid rgba(37,99,235,0.35); color: rgba(255,255,255,0.93); align-self: flex-start; }
+    .cb.user { background: rgba(255,255,255,0.09); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.85); align-self: flex-end; }
+    .cb-lbl { font-size: 9px; font-weight: 700; opacity: .5; margin-bottom: 3px; letter-spacing: .5px; }
+    .c-typing { display: flex; align-items: center; gap: 4px; padding: 12px 14px; background: rgba(37,99,235,0.26); border: 1px solid rgba(37,99,235,0.35); border-radius: 16px; align-self: flex-start; animation: cbIn .28s ease; }
+    .ctd { width: 6px; height: 6px; background: rgba(255,255,255,.45); border-radius: 50%; animation: ctDot 1.2s infinite; }
+    .ctd:nth-child(2){animation-delay:.2s} .ctd:nth-child(3){animation-delay:.4s}
+    @keyframes ctDot{0%,80%,100%{transform:scale(.6);opacity:.3}40%{transform:scale(1);opacity:1}}
+    /* Suggestions + text input */
+    .chat-suggestions { padding: 8px 14px 0; display: flex; gap: 6px; flex-wrap: wrap; flex-shrink: 0; animation: cbIn .3s ease; }
+    .chat-sugg-lbl { font-size: 10px; color: rgba(255,255,255,0.25); padding: 8px 14px 2px; flex-shrink: 0; }
+    .sugg-btn { background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.14); color: rgba(255,255,255,0.75); border-radius: 100px; padding: 7px 13px; font-size: 12px; cursor: pointer; transition: all .15s; font-family: inherit; white-space: nowrap; }
+    .sugg-btn:hover { background: rgba(37,99,235,0.3); border-color: rgba(96,165,250,.5); color: #fff; }
+    .chat-input-row { display: flex; gap: 8px; padding: 8px 14px 14px; align-items: flex-end; flex-shrink: 0; }
+    .chat-input-wrap { flex: 1; position: relative; }
+    .chat-text-input { width: 100%; background: rgba(255,255,255,0.07); border: 1.5px solid var(--border); border-radius: 14px; padding: 11px 14px; font-size: 14px; color: var(--text); outline: none; font-family: inherit; transition: border-color .18s; resize: none; max-height: 90px; line-height: 1.5; }
+    .chat-text-input::placeholder { color: rgba(255,255,255,0.25); }
+    .chat-text-input:focus { border-color: rgba(96,165,250,0.5); background: rgba(255,255,255,0.09); }
+    .chat-send-btn { width: 42px; height: 42px; background: var(--accent); border: none; border-radius: 12px; color: #fff; font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all .18s; box-shadow: 0 4px 12px rgba(37,99,235,0.35); }
+    .chat-send-btn:hover { background: #1d4ed8; }
+    .chat-send-btn:active { transform: scale(0.92); }
+    .chat-send-btn:disabled { background: rgba(255,255,255,0.1); box-shadow: none; cursor: default; }
+
+    /* ── S5: Note ── */
+    #s5 { background: var(--bg); overflow-y: auto; }
+    #s5::-webkit-scrollbar { display: none; }
+    .note-top { text-align: center; padding: 20px 20px 14px; }
+    .note-icon { font-size: 48px; animation: notePop .5s cubic-bezier(.34,1.56,.64,1) both .1s; }
     @keyframes notePop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
     .note-ttl { font-size: 21px; font-weight: 800; color: #fff; margin-top: 10px; }
-    .note-stl { font-size: 13px; color: var(--dim); margin-top: 4px; margin-bottom: 4px; }
-    .note-card {
-      margin: 8px 16px 12px;
-      background: rgba(37,99,235,0.1);
-      border: 1px solid rgba(96,165,250,0.22);
-      border-radius: 18px; padding: 18px;
-    }
-    .note-card-hdr {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 14px; padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-    }
-    .note-bk-mini {
-      width: 30px; height: 40px;
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      border-radius: 5px; display: flex; align-items: center;
-      justify-content: center; font-size: 14px; flex-shrink: 0;
-    }
+    .note-stl { font-size: 13px; color: var(--dim); margin-top: 4px; }
+    .note-meta-row { display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
+    .note-meta-chip { background: rgba(255,255,255,0.06); border: 1px solid var(--border); color: var(--dim); font-size: 11px; padding: 3px 10px; border-radius: 100px; }
+    .note-card { margin: 12px 16px; background: rgba(37,99,235,0.1); border: 1px solid rgba(96,165,250,0.22); border-radius: 18px; padding: 18px; }
+    .note-card-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .note-bk-mini { width: 30px; height: 40px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
     .note-bk-name { font-size: 13px; font-weight: 700; color: #fff; }
     .note-bk-ch { font-size: 11px; color: var(--dim); margin-top: 2px; }
     .note-sec { margin-bottom: 14px; }
-    .note-sec-lbl {
-      font-size: 9px; font-weight: 700; color: #60a5fa;
-      letter-spacing: 1.2px; margin-bottom: 6px;
-    }
+    .note-sec-lbl { font-size: 9px; font-weight: 700; color: #60a5fa; letter-spacing: 1.2px; margin-bottom: 6px; }
     .note-sec-body { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.65; }
     .note-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .note-tag {
-      background: rgba(37,99,235,0.22); border: 1px solid rgba(37,99,235,0.32);
-      color: #93c5fd; font-size: 11px; padding: 3px 10px; border-radius: 100px;
-    }
-    .review-pill {
-      margin: 0 16px 16px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--border);
-      border-radius: 14px; padding: 13px 16px;
-      display: flex; align-items: center; gap: 12px;
-    }
+    .note-tag { background: rgba(37,99,235,0.22); border: 1px solid rgba(37,99,235,0.32); color: #93c5fd; font-size: 11px; padding: 3px 10px; border-radius: 100px; }
+    .review-pill { margin: 0 16px 14px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 14px; padding: 13px 16px; display: flex; align-items: center; gap: 12px; }
     .review-pill-icon { font-size: 22px; }
     .review-pill-text { font-size: 13px; color: var(--dim); line-height: 1.5; }
     .review-pill-text strong { color: #60a5fa; }
-    .note-actions { padding: 0 16px 20px; display: flex; flex-direction: column; gap: 9px; }
-    .act-pri {
-      background: var(--accent); color: #fff;
-      padding: 16px; border: none; border-radius: 14px;
-      font-size: 15px; font-weight: 700; cursor: pointer;
-      text-decoration: none; display: block; text-align: center;
-      transition: all .18s; box-shadow: 0 6px 20px rgba(37,99,235,0.35);
-    }
+    .note-actions { padding: 0 16px 24px; display: flex; flex-direction: column; gap: 9px; }
+    .act-pri { background: var(--accent); color: #fff; padding: 16px; border: none; border-radius: 14px; font-size: 15px; font-weight: 700; cursor: pointer; text-decoration: none; display: block; text-align: center; transition: all .18s; box-shadow: 0 6px 20px rgba(37,99,235,.35); }
     .act-pri:active { transform: scale(0.98); }
-    .act-sec {
-      background: transparent; color: var(--dim);
-      padding: 13px; border: 1.5px solid var(--border);
-      border-radius: 14px; font-size: 14px; cursor: pointer;
-      transition: all .18s; font-family: inherit;
-    }
-    .act-sec:hover { background: rgba(255,255,255,0.04); }
 
-    /* Desktop side label */
-    .side-info {
-      position: fixed; right: calc(50% - 195px - 180px);
-      top: 50%; transform: translateY(-50%);
-      max-width: 160px;
+    /* ── Diary style ── */
+    .diary-header { padding: 20px 20px 14px; }
+    .diary-date-line { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+    .diary-date { font-size: 13px; font-weight: 700; color: #60a5fa; }
+    .diary-weather { font-size: 12px; color: rgba(255,255,255,0.35); }
+    .diary-range { font-size: 12px; color: rgba(255,255,255,0.35); }
+    .diary-page {
+      margin: 0 16px 14px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
     }
+    /* subtle ruled lines */
+    .diary-page::before {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; top: 0; bottom: 0;
+      background: repeating-linear-gradient(
+        transparent, transparent 27px,
+        rgba(255,255,255,0.04) 27px, rgba(255,255,255,0.04) 28px
+      );
+      pointer-events: none;
+    }
+    .diary-line-deco {
+      width: 2px; height: 100%;
+      position: absolute; left: 36px; top: 0;
+      background: rgba(96,165,250,0.12);
+    }
+    .diary-body {
+      font-size: 15px;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.9;
+      white-space: pre-line;
+      padding-left: 28px;
+      position: relative;
+      z-index: 1;
+      margin-bottom: 16px;
+      font-weight: 400;
+      letter-spacing: -0.1px;
+    }
+    .diary-tags { display: flex; flex-wrap: wrap; gap: 6px; padding-left: 28px; position: relative; z-index: 1; }
+    .diary-tag { background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.3); color: #93c5fd; font-size: 11px; padding: 3px 10px; border-radius: 100px; }
+
+    /* Side (desktop) */
+    .side-info { position: fixed; right: calc(50% - 195px - 180px); top: 50%; transform: translateY(-50%); max-width: 160px; }
     .side-logo { font-size: 20px; font-weight: 800; color: rgba(255,255,255,0.9); margin-bottom: 8px; }
     .side-desc { font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.7; margin-bottom: 20px; }
     .side-back { font-size: 13px; color: rgba(255,255,255,0.35); text-decoration: none; display: flex; align-items: center; gap: 5px; }
     .side-back:hover { color: rgba(255,255,255,0.7); }
     @media (max-width: 750px) { .side-info { display: none; } }
-
-    /* Mobile full-screen mode */
     @media (max-width: 500px) {
       body { align-items: flex-start; justify-content: flex-start; background: var(--bg); }
       .shell { width: 100vw; height: 100dvh; border-radius: 0; border: none; box-shadow: none; }
@@ -368,142 +302,209 @@
 
 <div class="shell">
   <div class="sbar">
-    <span id="sbar-time">9:41</span>
-    <div class="sbar-right">
-      <div class="sbar-dot"></div><div class="sbar-dot"></div><div class="sbar-dot"></div>
-      <span style="font-size:13px;">●●●</span>
-    </div>
+    <span id="sbarTime">9:41</span>
+    <span style="font-size:13px;letter-spacing:2px;">●●●</span>
   </div>
-
   <div class="screens">
 
-    <!-- Screen 0: Splash -->
+    <!-- S0: Splash -->
     <div class="screen" id="s0">
       <div class="splash-glow"></div>
       <div class="splash-logo">📚</div>
       <div class="splash-title">책잇다</div>
       <div class="splash-sub">읽은 책이 진짜 내 것이 되는<br>AI 독서 대화 체험</div>
       <div class="live-badge"><div class="live-dot"></div> 프로토타입 체험</div>
-      <button class="big-btn" onclick="goTo(1)">지금 체험해보기 →</button>
+      <button class="big-btn" onclick="goTo(1)" style="max-width:260px;position:relative;z-index:1;">지금 체험해보기 →</button>
       <div class="splash-note">실제 데이터를 저장하지 않습니다</div>
     </div>
 
-    <!-- Screen 1: Bookshelf -->
+    <!-- S1: Bookshelf -->
     <div class="screen out-right" id="s1">
       <div class="s-header">
         <div class="s-title">안녕하세요 <em>👋</em></div>
-        <div class="s-sub">오늘도 읽고 계시는군요!</div>
+        <div class="s-sub">오늘 읽을 책을 골라보세요</div>
       </div>
-      <div class="shelf-section-label">📖 읽는 중</div>
-      <div class="book-card" onclick="goTo(2)">
-        <div class="book-card-new-badge">새 챕터 완료</div>
-        <div class="bcover atomic">📗</div>
-        <div>
-          <div class="b-status">📖 읽는 중</div>
-          <div class="b-name">아토믹 해빗</div>
-          <div class="b-author">제임스 클리어</div>
-          <div class="b-bar"><div class="b-fill" style="width:65%"></div></div>
-          <div class="b-prog">3/5 챕터 · 65% 완료</div>
+      <div class="scroll-area" style="padding-bottom:16px;">
+        <div class="shelf-lbl">📖 읽는 중</div>
+        <div class="book-card" onclick="goTo(2)">
+          <div class="new-badge">읽기 시작</div>
+          <div class="bcover atomic">📗</div>
+          <div>
+            <div class="b-status">📖 읽는 중</div>
+            <div class="b-name">아토믹 해빗</div>
+            <div class="b-author">제임스 클리어</div>
+            <div class="b-bar"><div class="b-fill" style="width:52%"></div></div>
+            <div class="b-prog">2/5 챕터 완료 · 52%</div>
+          </div>
         </div>
-      </div>
-      <div class="shelf-section-label" style="margin-top:8px;">📚 읽을 예정</div>
-      <div class="book-card" style="opacity:0.55; cursor:default;">
-        <div class="bcover power">📘</div>
-        <div>
-          <div class="b-status" style="color:var(--dim)">대기 중</div>
-          <div class="b-name">초집중</div>
-          <div class="b-author">니르 이얄</div>
-          <div class="b-bar"><div class="b-fill" style="width:0%"></div></div>
-          <div class="b-prog">아직 시작 전</div>
+        <div class="shelf-lbl" style="margin-top:10px;">📚 읽을 예정</div>
+        <div class="book-card" style="opacity:0.5;cursor:default;">
+          <div class="bcover power">📘</div>
+          <div>
+            <div class="b-status" style="color:var(--dim)">대기 중</div>
+            <div class="b-name">초집중</div>
+            <div class="b-author">니르 이얄</div>
+            <div class="b-bar"><div class="b-fill" style="width:0%"></div></div>
+            <div class="b-prog">아직 시작 전</div>
+          </div>
         </div>
+        <div class="shelf-hint"><span>아토믹 해빗</span>을 탭해서<br>뽀모도로 읽기를 시작해보세요</div>
       </div>
-      <div class="shelf-hint"><span>아토믹 해빗</span>을 눌러서<br>오늘 읽은 챕터와 대화해보세요</div>
     </div>
 
-    <!-- Screen 2: Chapter check -->
+    <!-- S2: Pomodoro Timer -->
     <div class="screen out-right" id="s2">
       <div class="s-nav">
-        <button class="nav-back" onclick="goTo(1)">←</button>
-        <div class="nav-ttl">아토믹 해빗</div>
+        <button class="nav-back" onclick="goTo(1);resetTimer()">←</button>
+        <div class="nav-ttl">읽기 타이머</div>
       </div>
-      <div class="chapter-hero">
-        <div class="chapter-cover-sm">📗</div>
+      <div class="timer-book-pill">
+        <div class="timer-book-icon">📗</div>
         <div>
-          <div class="ch-book">아토믹 해빗 · 제임스 클리어</div>
-          <div class="ch-num">Chapter 3</div>
-          <div class="ch-title">네 번째 법칙:<br>보상을 만족스럽게</div>
+          <div class="timer-book-name">아토믹 해빗</div>
+          <div class="timer-book-sub">제임스 클리어</div>
         </div>
       </div>
-      <div class="q-box">
-        <div class="q-title">이번 챕터,<br>다 읽으셨나요?</div>
-        <div class="q-desc">읽고 나서 바로 AI와 대화하면<br>기억에 훨씬 오래 남아요.</div>
-        <div class="q-btns">
-          <button class="q-yes" onclick="startChat()">✅ 네, 다 읽었어요</button>
-          <button class="q-no" onclick="goTo(1)">아직요</button>
+      <!-- Duration selector -->
+      <div class="timer-dur-row">
+        <button class="timer-dur-btn" onclick="setDuration(15,this)">15분</button>
+        <button class="timer-dur-btn active" onclick="setDuration(25,this)">25분</button>
+        <button class="timer-dur-btn" onclick="setDuration(45,this)">45분</button>
+        <button class="timer-dur-btn" onclick="setDuration(60,this)">60분</button>
+      </div>
+      <div class="timer-center">
+        <div class="pomo-dots">
+          <div class="pomo-dot done"></div>
+          <div class="pomo-dot done"></div>
+          <div class="pomo-dot" id="pd2"></div>
+          <div class="pomo-dot" id="pd3"></div>
         </div>
-        <div class="tip-card">
-          💡 <strong>지금 바로 시작하세요.</strong><br>
-          읽고 1시간 이내에 대화하면 기억 유지율이 3배 높아집니다.
+        <div class="timer-wrap">
+          <svg class="timer-svg" viewBox="0 0 200 200">
+            <circle class="timer-ring-bg" cx="100" cy="100" r="88"/>
+            <circle class="timer-ring" cx="100" cy="100" r="88"
+              stroke-dasharray="553" stroke-dashoffset="0" id="timerRing"
+              transform="rotate(-90 100 100)"/>
+          </svg>
+          <div class="timer-inner">
+            <div class="timer-lbl">집중 시간</div>
+            <div class="timer-disp" id="timerDisp">25:00</div>
+            <div class="timer-sess">세션 3/4</div>
+          </div>
         </div>
+        <div class="timer-btns">
+          <button class="timer-main start" id="timerStartBtn" onclick="startTimer()">▶ 시작</button>
+          <button class="timer-main pause" id="timerPauseBtn" onclick="pauseTimer()" style="display:none">⏸ 일시정지</button>
+          <button class="timer-done" onclick="doneReading()">완료 ✓</button>
+        </div>
+        <div class="timer-skip" onclick="goTo(3)">타이머 없이 바로 기록 →</div>
       </div>
     </div>
 
-    <!-- Screen 3: AI Chat -->
+    <!-- S3: Progress Check -->
     <div class="screen out-right" id="s3">
-      <div class="chat-header">
+      <div class="s-nav">
         <button class="nav-back" onclick="goTo(2)">←</button>
+        <div class="nav-ttl">독서 기록</div>
+      </div>
+      <div class="prog-header">
+        <div class="prog-q">어디까지<br>읽으셨나요?</div>
+        <div class="prog-sub">오늘 읽은 범위를 기록해요</div>
+      </div>
+      <div class="tab-row">
+        <button class="tab-btn active" id="tabPage" onclick="switchTab('page')">📄 페이지</button>
+        <button class="tab-btn" id="tabChapter" onclick="switchTab('chapter')">📑 챕터</button>
+      </div>
+      <!-- Page mode -->
+      <div class="page-mode scroll-area" id="pageMode">
+        <div class="page-picker">
+          <button class="page-adj" onclick="adjPage(-10)">−−</button>
+          <button class="page-adj" onclick="adjPage(-1)">−</button>
+          <div>
+            <div class="page-num" id="pageNum">85</div>
+            <div class="page-unit">페이지</div>
+          </div>
+          <button class="page-adj" onclick="adjPage(1)">+</button>
+          <button class="page-adj" onclick="adjPage(10)">++</button>
+        </div>
+        <div class="page-hint">지난 세션 p.60에서 시작 → 오늘 <span id="pageRange">25페이지</span> 읽음</div>
+        <button class="big-btn" onclick="confirmProgress('page')">다음 — AI 대화 시작 →</button>
+      </div>
+      <!-- Chapter mode -->
+      <div class="chapter-mode scroll-area" id="chapterMode">
+        <div class="ch-opts">
+          <div class="ch-opt" onclick="selChapter(this,1,'습관의 놀라운 힘','1–30p')">
+            <div class="ch-radio"><div class="ch-radio-dot"></div></div>
+            <div><div class="ch-num">Chapter 1</div><div class="ch-title-text">습관의 놀라운 힘</div><div class="ch-pages">1–30p</div></div>
+          </div>
+          <div class="ch-opt" onclick="selChapter(this,2,'1%의 법칙','31–65p')">
+            <div class="ch-radio"><div class="ch-radio-dot"></div></div>
+            <div><div class="ch-num">Chapter 2</div><div class="ch-title-text">1%의 법칙</div><div class="ch-pages">31–65p</div></div>
+          </div>
+          <div class="ch-opt selected" id="ch3default" onclick="selChapter(this,3,'네 번째 법칙: 보상을 만족스럽게','66–105p')">
+            <div class="ch-radio"><div class="ch-radio-dot"></div></div>
+            <div><div class="ch-num">Chapter 3 · 지금 읽는 중</div><div class="ch-title-text">네 번째 법칙: 보상을 만족스럽게</div><div class="ch-pages">66–105p</div></div>
+          </div>
+          <div class="ch-opt" onclick="selChapter(this,4,'습관 추적의 힘','106–140p')">
+            <div class="ch-radio"><div class="ch-radio-dot"></div></div>
+            <div><div class="ch-num">Chapter 4</div><div class="ch-title-text">습관 추적의 힘</div><div class="ch-pages">106–140p</div></div>
+          </div>
+          <div class="ch-opt" onclick="selChapter(this,5,'절대 두 번 빠지지 마라','141–175p')">
+            <div class="ch-radio"><div class="ch-radio-dot"></div></div>
+            <div><div class="ch-num">Chapter 5</div><div class="ch-title-text">절대 두 번 빠지지 마라</div><div class="ch-pages">141–175p</div></div>
+          </div>
+        </div>
+        <button class="big-btn" onclick="confirmProgress('chapter')">다음 — AI 대화 시작 →</button>
+        <div style="height:16px"></div>
+      </div>
+    </div>
+
+    <!-- S4: Chat -->
+    <div class="screen out-right" id="s4">
+      <div class="chat-header">
+        <button class="nav-back" onclick="goTo(3)">←</button>
         <div class="ai-av">🤖</div>
         <div>
           <div class="ai-name">책잇다 AI</div>
-          <div class="ai-online">● 대화 중</div>
+          <div class="ai-status">● 대화 중</div>
         </div>
-        <div class="chat-book-pill">아토믹 해빗 3장</div>
+        <div class="chat-ctx-pill" id="chatCtxPill">—</div>
       </div>
       <div class="chat-msgs" id="chatMsgs"></div>
-      <div class="chat-input-area" id="chatInput"></div>
+      <!-- Suggestions row (shown contextually) -->
+      <div id="suggArea"></div>
+      <!-- Prototype notice: direct input disabled -->
+      <div style="padding: 10px 14px 14px; text-align: center; font-size: 11px; color: rgba(255,255,255,0.25); line-height: 1.6;">
+        프로토타입에서는 위 선택지로만 체험 가능해요<br>
+        <span style="color:rgba(255,255,255,0.35)">실제 앱에서는 자유롭게 입력할 수 있어요 ✍️</span>
+      </div>
     </div>
 
-    <!-- Screen 4: Note Generated -->
-    <div class="screen out-right" id="s4">
-      <div class="note-top">
-        <div class="note-icon">✨</div>
-        <div class="note-ttl">독서 노트 생성 완료!</div>
-        <div class="note-stl">대화 내용이 자동으로 정리됐어요</div>
+    <!-- S5: Note -->
+    <div class="screen out-right" id="s5">
+      <!-- 일기장 헤더 -->
+      <div class="diary-header">
+        <div class="diary-date-line">
+          <span class="diary-date" id="noteDate">오늘</span>
+          <span class="diary-weather">📗 아토믹 해빗</span>
+        </div>
+        <div class="diary-range" id="noteChLbl">—</div>
       </div>
-      <div class="note-card">
-        <div class="note-card-hdr">
-          <div class="note-bk-mini">📗</div>
-          <div>
-            <div class="note-bk-name">아토믹 해빗</div>
-            <div class="note-bk-ch">Chapter 3 · 오늘</div>
-          </div>
-        </div>
-        <div class="note-sec">
-          <div class="note-sec-lbl">📌 핵심 개념</div>
-          <div class="note-sec-body" id="note-core">—</div>
-        </div>
-        <div class="note-sec">
-          <div class="note-sec-lbl">🔗 나의 연결</div>
-          <div class="note-sec-body" id="note-conn">—</div>
-        </div>
-        <div class="note-sec">
-          <div class="note-sec-lbl">🎯 적용 계획</div>
-          <div class="note-sec-body" id="note-apply">—</div>
-        </div>
-        <div class="note-sec" style="margin-bottom:0">
-          <div class="note-sec-lbl">🏷 키워드</div>
-          <div class="note-tags" id="note-tags"></div>
-        </div>
+
+      <!-- 일기 본문 -->
+      <div class="diary-page">
+        <div class="diary-line-deco"></div>
+        <div class="diary-body" id="nJournal">—</div>
+        <div class="diary-tags" id="nTags"></div>
       </div>
+
       <div class="review-pill">
         <div class="review-pill-icon">🔔</div>
-        <div class="review-pill-text">
-          <strong>3일 후</strong>에 이 내용을<br>다시 꺼내드릴게요
-        </div>
+        <div class="review-pill-text"><strong>3일 후</strong>에 이 내용을 다시 꺼내드릴게요</div>
       </div>
       <div class="note-actions">
         <a class="act-pri" href="index.html#cta">📚 책잇다 베타 신청하기</a>
-        <button class="act-sec" onclick="resetAll()">↺ 처음부터 다시 체험</button>
+        <button class="ghost-btn" onclick="resetAll()">↺ 처음부터 다시 체험</button>
       </div>
     </div>
 
@@ -511,203 +512,365 @@
 </div><!-- /shell -->
 
 <script>
-  // Status bar clock
-  function updateClock() {
-    const now = new Date();
-    const h = now.getHours(), m = now.getMinutes();
-    document.getElementById('sbar-time').textContent = h + ':' + String(m).padStart(2,'0');
-  }
-  updateClock();
-  setInterval(updateClock, 10000);
+  // ── Clock ──
+  (function tick() {
+    const n = new Date();
+    document.getElementById('sbarTime').textContent =
+      n.getHours() + ':' + String(n.getMinutes()).padStart(2,'0');
+    setTimeout(tick, 10000);
+  })();
 
-  // Screen navigation
-  let currentScreen = 0;
+  // ── Navigation ──
+  let cur = 0;
   function goTo(n) {
-    const screens = document.querySelectorAll('.screen');
-    screens[currentScreen].classList.add(n > currentScreen ? 'out-left' : 'out-right');
-    screens[currentScreen].classList.remove('out-right', 'out-left');
-    // wait a tick then apply transition class
-    screens[currentScreen].style.transition = 'none';
-    setTimeout(() => {
-      screens[currentScreen].style.transition = '';
-      screens[currentScreen].classList.add(n > currentScreen ? 'out-left' : 'out-right');
-      screens[n].classList.remove('out-right', 'out-left');
-      currentScreen = n;
-    }, 10);
+    const ss = document.querySelectorAll('.screen');
+    const from = ss[cur];
+    from.style.transition = 'none';
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      from.style.transition = '';
+      from.classList.add(n > cur ? 'out-left' : 'out-right');
+      ss[n].classList.remove('out-right','out-left');
+      cur = n;
+    }));
   }
 
-  // ── Chat logic ──
-  let chatStep = 0;
-  let userChoices = {};
+  // ── Timer ──
+  let timerTotal = 25 * 60, timerRem = timerTotal, timerInt = null, timerGoing = false;
+  const CIRC = 553;
 
-  const CONVERSATIONS = [
-    // Step 1: AI opens
-    {
-      type: 'ai',
-      text: '이번 챕터 다 읽으셨군요! 수고하셨어요 😊<br><br>"보상을 만족스럽게" 챕터에서 가장 마음에 걸린 내용이 있었나요?',
-      choices: [
-        { text: '✋ 즉각적 보상이 중요하다는 부분', key: 'reward' },
-        { text: '🔗 습관 추적의 힘', key: 'tracking' },
-        { text: '🚫 절대 두 번 빠지지 않는 법칙', key: 'never2' }
-      ]
-    },
-    // Step 2: follow-up (depends on choice)
-    {
-      type: 'dynamic'
-    },
-    // Step 3: final AI response + note
-    {
-      type: 'final'
-    }
-  ];
+  function setDuration(mins, btn) {
+    if (timerGoing) return;
+    document.querySelectorAll('.timer-dur-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    timerTotal = mins * 60; timerRem = timerTotal; updateTimerUI();
+  }
 
-  const FOLLOWUPS = {
-    reward: {
-      ai: '즉각적 보상이 핵심이죠! 지금 하려는 습관 중에 바로 보람을 느끼기 어려운 게 있나요?',
-      choices: [
-        { text: '💪 운동인데, 살이 안 빠지니까요', key: 'exercise' },
-        { text: '📖 독서요, 바로 효과가 없으니', key: 'reading' }
-      ]
-    },
-    tracking: {
-      ai: '습관 추적은 정말 강력한 도구예요! 지금 추적하고 싶은 습관이 있다면요?',
-      choices: [
-        { text: '🌅 아침 루틴', key: 'morning' },
-        { text: '📝 공부 시간', key: 'study' }
-      ]
-    },
-    never2: {
-      ai: '"절대 두 번 빠지지 마라" — 이미 한 번 빠진 경험이 있으신가요?',
-      choices: [
-        { text: '😅 네, 헬스장을 일주일 빠진 적요', key: 'gym' },
-        { text: '📖 독서 계획이 흐지부지됐어요', key: 'book_fail' }
-      ]
-    }
+  function updateTimerUI() {
+    const m = Math.floor(timerRem/60), s = timerRem%60;
+    document.getElementById('timerDisp').textContent =
+      String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+    document.getElementById('timerRing').style.strokeDashoffset =
+      CIRC * (1 - timerRem/timerTotal);
+  }
+
+  function startTimer() {
+    if (timerGoing) return; timerGoing = true;
+    document.getElementById('timerStartBtn').style.display = 'none';
+    document.getElementById('timerPauseBtn').style.display = '';
+    timerInt = setInterval(() => {
+      timerRem--; updateTimerUI();
+      if (timerRem <= 0) { clearInterval(timerInt); timerGoing = false; doneReading(); }
+    }, 1000);
+  }
+
+  function pauseTimer() {
+    clearInterval(timerInt); timerGoing = false;
+    document.getElementById('timerStartBtn').style.display = '';
+    document.getElementById('timerPauseBtn').style.display = 'none';
+  }
+
+  function resetTimer() {
+    pauseTimer(); timerRem = timerTotal; updateTimerUI();
+  }
+
+  function doneReading() { pauseTimer(); goTo(3); }
+
+  // ── Progress ──
+  let currentTab = 'page', currentPage = 85;
+  let selCh = { num:3, title:'네 번째 법칙: 보상을 만족스럽게', pages:'66–105p' };
+
+  function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById('tabPage').classList.toggle('active', tab==='page');
+    document.getElementById('tabChapter').classList.toggle('active', tab==='chapter');
+    document.getElementById('pageMode').style.display = tab==='page' ? '' : 'none';
+    document.getElementById('chapterMode').style.display = tab==='chapter' ? 'block' : 'none';
+  }
+
+  function adjPage(d) {
+    currentPage = Math.max(61, Math.min(300, currentPage+d));
+    document.getElementById('pageNum').textContent = currentPage;
+    document.getElementById('pageRange').textContent = (currentPage-60) + '페이지';
+  }
+
+  function selChapter(el, num, title, pages) {
+    document.querySelectorAll('.ch-opt').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    selCh = { num, title, pages };
+  }
+
+  function confirmProgress(mode) {
+    const label = mode==='page'
+      ? 'p.'+currentPage+'까지'
+      : 'Ch.'+selCh.num;
+    document.getElementById('chatCtxPill').textContent = label;
+    startChat(mode);
+  }
+
+  // ── Chapter data (title only — AI asks, doesn't lecture) ──
+  const CHAPTER_DATA = {
+    1: { title: '습관의 놀라운 힘' },
+    2: { title: '1%의 법칙' },
+    3: { title: '네 번째 법칙: 보상을 만족스럽게' },
+    4: { title: '습관 추적의 힘' },
+    5: { title: '절대 두 번 빠지지 마라' }
   };
 
-  const NOTES = {
-    reward_exercise: {
-      core: '즉각적 보상이 습관 유지의 핵심. 운동 후 바로 즐거운 프로틴 쉐이크 한 잔 같은 미시적 보상을 설계하라.',
-      conn: '운동 직후 바로 보람이 없어서 포기했던 경험',
-      apply: '오늘 운동 후 좋아하는 음료 한 잔 마시기',
-      tags: ['즉각보상', '습관설계', '운동루틴']
-    },
-    reward_reading: {
-      core: '독서 후 즉각적 기록(노트 1줄)이 보람을 만든다. 미래의 "지식 쌓임"보다 지금의 작은 승리감이 더 강하다.',
-      conn: '독서 효과가 바로 안 느껴져 흥미가 떨어지던 경험',
-      apply: '챕터 끝날 때마다 핵심 1줄 바로 적기',
-      tags: ['독서보상', '즉각피드백', '습관유지']
-    },
-    tracking_morning: {
-      core: '습관 추적은 습관에 즉각적 보람을 더한다. 체크리스트 체크 자체가 보상이 된다.',
-      conn: '아침 루틴이 들쑥날쑥했던 경험',
-      apply: '내일부터 아침 루틴 체크리스트 앱으로 추적',
-      tags: ['습관추적', '아침루틴', '시각화']
-    },
-    tracking_study: {
-      core: '학습 추적은 "나는 공부하는 사람"이라는 정체성을 강화한다.',
-      conn: '공부 시간이 얼마나 되는지 막연했던 경험',
-      apply: '타이머로 공부 시간 기록, 주간 합계 확인',
-      tags: ['학습추적', '정체성', '시간관리']
-    },
-    never2_gym: {
-      core: '"절대 두 번 빠지지 않기" — 완벽하지 않아도 한 번만 빠지면 괜찮다. 두 번 빠지는 것이 진짜 문제.',
-      conn: '헬스장 일주일 빠지고 포기했던 경험',
-      apply: '빠졌을 때 죄책감 대신 바로 다음날 다시 시작',
-      tags: ['회복력', '습관연속성', '자기용서']
-    },
-    never2_book_fail: {
-      core: '독서 계획 한 번 빠지는 것은 실수, 두 번 빠지는 것이 습관 깨짐의 시작.',
-      conn: '독서 계획 흐지부지됐던 경험',
-      apply: '못 읽은 날 다음날은 반드시 1페이지라도 읽기',
-      tags: ['독서습관', '회복력', '최소행동']
-    }
-  };
+  // ── Chat ──
+  let convStep = 0, userTurns = [], chatLocked = false, currentChNum = 3, awaitingDetail = false;
 
-  function startChat() {
-    chatStep = 0;
-    userChoices = {};
+  function getChData() {
+    return CHAPTER_DATA[currentChNum] || CHAPTER_DATA[3];
+  }
+
+  function startChat(mode) {
+    convStep = 0; userTurns = []; chatLocked = false; awaitingDetail = false;
     document.getElementById('chatMsgs').innerHTML = '';
-    document.getElementById('chatInput').innerHTML = '';
-    goTo(3);
-    setTimeout(() => addAI(CONVERSATIONS[0].text, () => {
-      showChoices(CONVERSATIONS[0].choices, (key) => {
-        userChoices.step1 = key;
-        const fu = FOLLOWUPS[key];
-        addUser(fu && fu.choices ? CONVERSATIONS[0].choices.find(c => c.key===key).text : '');
-        addAI(fu.ai, () => showChoices(fu.choices, (key2) => {
-          userChoices.step2 = key2;
-          addUser(fu.choices.find(c=>c.key===key2).text);
-          addAI('정말 공감돼요. 그 경험이 오늘 챕터와 딱 맞닿아 있네요 ✨<br><br>노트를 정리해 드릴게요!', () => {
-            setTimeout(() => buildNote(key, key2), 400);
-          });
-        }));
-      });
-    }), 600);
+    document.getElementById('suggArea').innerHTML = '';
+    currentChNum = mode==='chapter' ? selCh.num : 3;
+    goTo(4);
+
+    const ch = getChData();
+    const rangeStr = mode==='page'
+      ? 'p.' + currentPage + '까지'
+      : 'Ch.' + selCh.num + ' 「' + ch.title + '」';
+    const openMsg =
+      rangeStr + ' 읽으셨군요! 😊<br><br>' +
+      '오늘 읽은 내용 중에서 <strong>가장 기억에 남는 부분</strong>이 뭔가요?<br>' +
+      '아래 선택지를 눌러보세요 — 실제 앱에서는 자유롭게 입력할 수 있어요.';
+
+    // Generic prompts — work for any chapter/page
+    const step1Sugg = [
+      '인상 깊었던 개념이요',
+      '공감됐던 사례나 이야기요',
+      '적용해보고 싶은 부분이요',
+    ];
+
+    chatLocked = true;
+    setTimeout(() => addAI(openMsg, () => {
+      convStep = 1;
+      showSugg(step1Sugg, (picked) => sendRaw(picked));
+      chatLocked = false;
+    }), 500);
   }
 
-  function addAI(text, cb) {
+  function showSugg(options, onPick) {
+    const area = document.getElementById('suggArea');
+    const lbl = document.createElement('div');
+    lbl.className = 'chat-sugg-lbl'; lbl.textContent = '선택지를 눌러보세요 (프로토타입 체험)';
+    area.innerHTML = ''; area.appendChild(lbl);
+    const row = document.createElement('div');
+    row.className = 'chat-suggestions';
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'sugg-btn'; btn.textContent = opt;
+      btn.onclick = () => {
+        area.innerHTML = '';
+        onPick(opt);
+      };
+      row.appendChild(btn);
+    });
+    area.appendChild(row);
+  }
+
+  function clearSugg() {
+    document.getElementById('suggArea').innerHTML = '';
+  }
+
+  function sendRaw(text) {
+    if (chatLocked || convStep===0 || convStep===3) return;
+    chatLocked = true;
+    clearSugg();
+    addUser(text);
+
+    const ch = getChData();
+
+    if (convStep===1) {
+      userTurns[0] = text;
+      convStep = 2;
+      const followUp = genFollowUp(text, ch);
+      setTimeout(() => addAI(followUp.msg, () => {
+        showSugg(followUp.sugg, (picked) => sendRaw(picked));
+        chatLocked = false;
+      }), 300);
+
+    } else if (convStep===2) {
+      if (awaitingDetail) {
+        // 경험 구체화 답변 받음 → 마무리
+        awaitingDetail = false;
+        userTurns[1] = text;
+        convStep = 3;
+        const wrapUp = genWrapUp(userTurns[0], text);
+        setTimeout(() => addAI(wrapUp, () => {
+          setTimeout(() => buildNote(), 500);
+        }), 300);
+
+      } else if (text === '비슷한 경험이 있어요') {
+        // 경험이 있다고 했으니 어떤 경험인지 한 번 더 물어보기
+        awaitingDetail = true;
+        setTimeout(() => addAI('오, 어떤 경험이었는지 조금 더 얘기해주실 수 있어요? 😊', () => {
+          showSugg([
+            '헬스장을 꾸준히 못 간 적 있어요',
+            '독서 계획이 흐지부지된 적 있어요',
+            '다이어트를 중간에 포기한 적 있어요',
+          ], (picked) => sendRaw(picked));
+          chatLocked = false;
+        }), 300);
+
+      } else {
+        userTurns[1] = text;
+        convStep = 3;
+        const wrapUp = genWrapUp(userTurns[0], text);
+        setTimeout(() => addAI(wrapUp, () => {
+          setTimeout(() => buildNote(), 500);
+        }), 300);
+      }
+    }
+  }
+
+  function genFollowUp(text, ch) {
+    const t = text.toLowerCase();
+    // Match against chapter concepts
+    if (t.includes('즉각') || t.includes('보상')) {
+      return { msg: '즉각적 보상이 핵심이죠! 지금 유지하고 싶은 습관이 있는데 바로 보람이 안 느껴지는 게 있나요?',
+               sugg: ['운동인데 살이 안 빠져서요', '독서인데 효과가 바로 없어서요', '아직 딱 떠오르진 않아요'] };
+    }
+    if (t.includes('추적') || t.includes('체크')) {
+      return { msg: '습관 추적 정말 강력하죠! 지금 추적하고 싶은 습관이 있다면요?',
+               sugg: ['아침 루틴이요', '독서 시간이요', '운동 횟수요'] };
+    }
+    if (t.includes('두 번') || t.includes('빠지') || t.includes('포기') || t.includes('연속')) {
+      return { msg: '"두 번 빠지지 마라" — 실제로 한 번 빠진 뒤 그냥 포기해버린 경험이 있으신가요?',
+               sugg: ['헬스장 일주일 빠진 적 있어요', '독서 계획이 흐지부지됐어요', '다이어트가 그랬어요'] };
+    }
+    if (t.includes('1%') || t.includes('복리') || t.includes('작은')) {
+      return { msg: '1%씩 나아지는 것, 실제로 지금 적용하고 싶은 영역이 있나요?',
+               sugg: ['운동 루틴이요', '독서 습관이요', '아직 모르겠어요'] };
+    }
+    if (t.includes('정체성') || t.includes('시스템') || t.includes('목표')) {
+      return { msg: '정체성 기반 습관이 핵심이죠! 지금 되고 싶은 모습이 있다면 어떤 사람인가요?',
+               sugg: ['꾸준히 운동하는 사람이요', '매일 읽는 독서가요', '아직 명확하지 않아요'] };
+    }
+    if (t.includes('환경') || t.includes('신호') || t.includes('마찰')) {
+      return { msg: '환경 설계가 의지력보다 강력하죠. 지금 바꿔볼 수 있는 환경이 있다면요?',
+               sugg: ['폰 위치를 바꾸고 싶어요', '책을 책상 위에 두고 싶어요', '천천히 생각해볼게요'] };
+    }
+    // Generic fallback — based on what the user said, not chapter assumptions
+    return { msg: '좋은 부분을 잡으셨어요! 😊 그 내용이 지금 본인 상황이랑 연결되는 게 있나요?',
+             sugg: ['비슷한 경험이 있어요', '아직 연결이 안 돼요', '조금 더 생각해볼게요'] };
+  }
+
+  function genWrapUp(t1, t2) {
+    const combined = (t1+' '+t2).toLowerCase();
+    if (combined.includes('운동') || combined.includes('헬스'))
+      return '운동 습관, 오늘 읽은 내용으로 다시 설계해볼 수 있을 것 같아요 💪<br>바로 노트로 남겨드릴게요!';
+    if (combined.includes('독서') || combined.includes('책'))
+      return '독서 습관을 더 단단히 만드는 방향으로 정리해드릴게요 📚<br>노트 생성 중이에요!';
+    if (combined.includes('포기') || combined.includes('빠지') || combined.includes('실패'))
+      return '그 경험이 오늘 챕터와 정확히 맞닿아 있어요. 실패가 아니라 구조가 없었던 거예요 ✨<br>노트 정리해드릴게요!';
+    return '정말 솔직한 연결이에요 ✨ 그 생각 그대로 노트에 담아드릴게요!';
+  }
+
+
+  function genTags(t1, t2) {
+    const c = (t1+' '+t2).toLowerCase();
+    const map = [
+      {kw:['운동','헬스','스트레칭'],tag:'운동루틴'},
+      {kw:['습관','루틴','반복'],    tag:'습관형성'},
+      {kw:['작은','2분','조금'],     tag:'작은시작'},
+      {kw:['독서','책','읽'],        tag:'독서습관'},
+      {kw:['추적','체크'],           tag:'습관추적'},
+      {kw:['아침','기상','새벽'],    tag:'아침루틴'},
+      {kw:['포기','빠지','실패'],    tag:'회복력'},
+      {kw:['정체성','목표','시스템'],tag:'정체성'},
+      {kw:['즉각','보상'],           tag:'즉각보상'},
+    ];
+    const tags = map.filter(t => t.kw.some(k => c.includes(k))).map(t => t.tag);
+    if (!tags.includes('습관형성')) tags.push('습관형성');
+    return tags.slice(0,4);
+  }
+
+  // 요/이요 어미 제거해서 일기체로
+  function toDiary(text) {
+    return text
+      .replace(/있어요$/, '있었다')
+      .replace(/없어서요$/, '없어서인 것 같다')
+      .replace(/됐어요$/, '됐다')
+      .replace(/할게요$/, '해야겠다')
+      .replace(/볼게요$/, '봐야겠다')
+      .replace(/이에요$|예요$/, '이다')
+      .replace(/이요$/, '')
+      .replace(/요$/, '');
+  }
+
+  function buildNote() {
+    const t1 = userTurns[0]||'', t2 = userTurns[1]||'';
+    const ch = getChData();
+    const range = currentTab==='page'
+      ? 'p.60 → p.'+currentPage
+      : 'Ch.'+selCh.num+' · '+(selCh.pages||'');
+
+    // 일기 본문: 사용자 말을 일기체 문장으로 조합
+    const lines = [];
+    if (t1) {
+      const c1 = toDiary(t1);
+      lines.push('오늘 읽으면서 가장 기억에 남은 건 ' + c1 + ' 부분이었다.');
+    }
+    if (t2) {
+      const c2 = toDiary(t2);
+      lines.push(c2 + (c2.endsWith('다') || c2.endsWith('.') ? '' : '.'));
+    }
+    document.getElementById('nJournal').textContent = lines.join('\n\n') || '—';
+    document.getElementById('nTags').innerHTML = genTags(t1,t2).map(t=>`<span class="diary-tag">${t}</span>`).join('');
+    document.getElementById('noteChLbl').textContent = currentTab==='page' ? range : ch.title;
+    const n = new Date();
+    document.getElementById('noteDate').textContent = (n.getMonth()+1)+'월 '+n.getDate()+'일';
+    setTimeout(() => goTo(5), 600);
+  }
+
+  function addAI(html, cb) {
     const msgs = document.getElementById('chatMsgs');
-    const typing = document.createElement('div');
-    typing.className = 'c-typing-ind';
-    typing.innerHTML = '<div class="ctd"></div><div class="ctd"></div><div class="ctd"></div>';
-    msgs.appendChild(typing);
-    msgs.scrollTop = msgs.scrollHeight;
+    const t = document.createElement('div');
+    t.className = 'c-typing';
+    t.innerHTML = '<div class="ctd"></div><div class="ctd"></div><div class="ctd"></div>';
+    msgs.appendChild(t); msgs.scrollTop = 9999;
+    const delay = Math.min(800 + html.replace(/<[^>]*>/g,'').length*15, 2000);
     setTimeout(() => {
-      msgs.removeChild(typing);
+      msgs.removeChild(t);
       const b = document.createElement('div');
       b.className = 'cb ai';
-      b.innerHTML = '<div class="cb-label">책잇다 AI</div>' + text;
-      msgs.appendChild(b);
-      msgs.scrollTop = msgs.scrollHeight;
+      b.innerHTML = '<div class="cb-lbl">책잇다 AI</div>'+html;
+      msgs.appendChild(b); msgs.scrollTop = 9999;
       if (cb) cb();
-    }, 1100);
+    }, delay);
   }
 
   function addUser(text) {
+    if (!text) return;
     const msgs = document.getElementById('chatMsgs');
     const b = document.createElement('div');
     b.className = 'cb user';
-    b.innerHTML = '<div class="cb-label">나</div>' + text;
-    msgs.appendChild(b);
-    msgs.scrollTop = msgs.scrollHeight;
-  }
-
-  function showChoices(choices, onSelect) {
-    const area = document.getElementById('chatInput');
-    area.innerHTML = '';
-    choices.forEach(c => {
-      const btn = document.createElement('button');
-      btn.className = 'c-opt';
-      btn.textContent = c.text;
-      btn.onclick = () => {
-        area.querySelectorAll('.c-opt').forEach(b => b.disabled = true);
-        onSelect(c.key);
-      };
-      area.appendChild(btn);
-    });
-    document.getElementById('chatMsgs').scrollTop = 9999;
-  }
-
-  function buildNote(k1, k2) {
-    const noteKey = k1 + '_' + k2;
-    const note = NOTES[noteKey] || NOTES['reward_exercise'];
-    document.getElementById('note-core').textContent = note.core;
-    document.getElementById('note-conn').textContent = note.conn;
-    document.getElementById('note-apply').textContent = note.apply;
-    const tagEl = document.getElementById('note-tags');
-    tagEl.innerHTML = note.tags.map(t => `<span class="note-tag">${t}</span>`).join('');
-    document.getElementById('chatInput').innerHTML = '';
-    setTimeout(() => goTo(4), 600);
+    b.innerHTML = '<div class="cb-lbl">나</div>'+text.replace(/\n/g,'<br>');
+    msgs.appendChild(b); msgs.scrollTop = 9999;
   }
 
   function resetAll() {
-    chatStep = 0;
-    userChoices = {};
-    document.getElementById('chatMsgs').innerHTML = '';
-    document.getElementById('chatInput').innerHTML = '';
+    resetTimer(); convStep=0; userTurns=[]; chatLocked=false; awaitingDetail=false;
+    currentPage=85; currentTab='page'; selCh={num:3,title:'네 번째 법칙: 보상을 만족스럽게',pages:'66–105p'};
+    switchTab('page');
+    document.getElementById('pageNum').textContent='85';
+    document.getElementById('pageRange').textContent='25페이지';
+    document.querySelectorAll('.ch-opt').forEach(o=>o.classList.remove('selected'));
+    document.getElementById('ch3default').classList.add('selected');
+    document.getElementById('chatMsgs').innerHTML='';
+    document.getElementById('chatInput').value='';
+    document.getElementById('suggArea').innerHTML='';
     goTo(0);
   }
+
+  // Init
+  updateTimerUI();
+  switchTab('page');
 </script>
 </body>
 </html>
