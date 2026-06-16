@@ -24,6 +24,11 @@
       "source": "/e",
       "destination": "/?utm_source=everytime&utm_medium=community&utm_campaign=beta",
       "permanent": false
+    },
+    {
+      "source": "/b",
+      "destination": "/?utm_source=blind&utm_medium=community&utm_campaign=beta",
+      "permanent": false
     }
   ]
 }
