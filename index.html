@@ -240,9 +240,26 @@
     .d-typing-dot:nth-child(2) { animation-delay: 0.2s; }
     .d-typing-dot:nth-child(3) { animation-delay: 0.4s; }
     @keyframes dtDot { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; } 40% { transform: scale(1); opacity: 1; } }
-    .d-note-card { background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.3); border-radius: 12px; padding: 14px 16px; animation: dBubbleIn .4s ease; margin-top: 4px; }
-    .d-note-title { font-size: 10px; font-weight: 700; color: #93c5fd; margin-bottom: 8px; letter-spacing: 0.5px; }
-    .d-note-row { font-size: 12.5px; color: rgba(255,255,255,0.78); line-height: 1.55; margin-bottom: 4px; }
+    .d-note-card {
+      background: #0d1f3c; border: 1.5px solid rgba(96,165,250,0.3);
+      border-radius: 14px; padding: 16px; animation: dBubbleIn .4s ease; margin-top: 6px;
+      position: relative; overflow: hidden; width: 100%;
+    }
+    .d-note-card::before {
+      content: '';
+      position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+      background: repeating-linear-gradient(transparent, transparent 24px, rgba(255,255,255,0.05) 24px, rgba(255,255,255,0.05) 25px);
+      pointer-events: none;
+    }
+    .d-note-line-deco { position: absolute; left: 34px; top: 0; bottom: 0; width: 1.5px; background: rgba(96,165,250,0.22); }
+    .d-note-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; position: relative; z-index: 1; padding-left: 24px; }
+    .d-note-date { font-size: 11px; font-weight: 700; color: #60a5fa; }
+    .d-note-book { font-size: 11px; color: rgba(255,255,255,0.4); }
+    .d-note-body { font-size: 13.5px; line-height: 1.9; padding-left: 24px; position: relative; z-index: 1; margin-bottom: 12px; }
+    .d-note-line { color: rgba(255,255,255,0.85) !important; margin-bottom: 10px; }
+    .d-note-line:last-child { margin-bottom: 0; }
+    .d-note-tags { display: flex; flex-wrap: wrap; gap: 5px; padding-left: 24px; position: relative; z-index: 1; }
+    .d-note-tag { background: rgba(37,99,235,0.25); border: 1px solid rgba(37,99,235,0.4); color: #93c5fd; font-size: 11px; padding: 3px 9px; border-radius: 100px; }
     .d-start-btn { width: 100%; background: var(--accent); color: #fff; padding: 14px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .2s; }
     .d-start-btn:hover { background: var(--accent-dark); }
     .d-final-wrap { text-align: center; padding: 16px 0 4px; }
@@ -760,15 +777,17 @@
 
   function dSetAction(html) { document.getElementById('dAction').innerHTML = html; }
 
+  let dStep1Text = '';
+
   function dStart() {
     if (demoActive) return;
-    demoActive = true;
+    demoActive = true; dStep1Text = '';
     dSetAction('');
-    dAddAI('아토믹 해빗 3장을 다 읽으셨군요! 이번 챕터에서 가장 마음에 걸린 내용이 있었나요?').then(() => {
+    dAddAI('아토믹 해빗 3장 읽으셨군요! 😊<br>오늘 읽으면서 가장 기억에 남은 부분이 뭔가요?').then(() => {
       dSetAction(`<div class="d-choices">
-        <button class="d-choice" onclick="dChoice1(this,'작은 습관부터 시작하라는 부분이요. 운동을 매일 하려다 실패해서요.','habit')">✋ 작은 습관부터 시작하라는 부분</button>
-        <button class="d-choice" onclick="dChoice1(this,'정체성 기반으로 습관을 만들어야 한다는 것이요.','identity')">🔑 정체성 기반 습관 만들기</button>
-        <button class="d-choice" onclick="dChoice1(this,'환경 설계가 의지력보다 강력하다는 부분이요.','env')">🌱 환경 설계의 중요성</button>
+        <button class="d-choice" onclick="dChoice1(this,'작은 습관부터 시작하라는 부분','habit')">✋ 작은 습관부터 시작하라는 부분</button>
+        <button class="d-choice" onclick="dChoice1(this,'정체성 기반으로 습관을 만들어야 한다는 것','identity')">🔑 정체성 기반 습관 만들기</button>
+        <button class="d-choice" onclick="dChoice1(this,'환경 설계가 의지력보다 강력하다는 것','env')">🌱 환경 설계의 중요성</button>
       </div>`);
     });
   }
@@ -776,19 +795,20 @@
   function dChoice1(btn, text, type) {
     document.querySelectorAll('.d-choice').forEach(b => b.disabled = true);
     dSetAction('');
+    dStep1Text = text;
     dAddUser(text);
     const configs = {
       habit: {
-        ai: '그 경험, 정말 많은 분들이 공감해요 😊 "2분 규칙"이 나왔는데 — 지금 당장 2분으로 시작할 수 있는 가장 작은 행동이 뭘까요?',
-        choices: [['🏃 스트레칭 2분','운동 루틴 실패 → 스트레칭 2분부터 시작'],['📚 책 한 페이지 읽기','독서 루틴 → 1페이지로 시작']]
+        ai: '운동을 매일 하려다 실패한 경험이 있으신가요?',
+        choices: [['헬스장을 꾸준히 못 간 적 있어요','헬스장을 꾸준히 못 간 적 있었다'],['독서 계획이 흐지부지된 적 있어요','독서 계획이 흐지부지된 적 있었다']]
       },
       identity: {
-        ai: '핵심을 정확히 짚으셨어요! 지금 되고 싶은 사람의 모습이 있다면 어떤 건가요?',
-        choices: [['💪 꾸준히 운동하는 사람','목표 정체성: 운동하는 사람'],['📖 매일 읽는 독서가','목표 정체성: 꾸준히 읽는 독서가']]
+        ai: '지금 되고 싶은 모습이 있다면 어떤 사람인가요?',
+        choices: [['꾸준히 운동하는 사람이요','꾸준히 운동하는 사람이 되고 싶다'],['매일 읽는 독서가요','매일 읽는 독서가가 되고 싶다']]
       },
       env: {
-        ai: '맞아요, 환경이 의지력보다 훨씬 강력하죠. 지금 바꿔볼 수 있는 환경이 있다면요?',
-        choices: [['📵 자기 전 폰 침대 밖에 두기','환경 변화: 폰 위치 바꾸기'],['📗 책상 위에 책 올려두기','환경 변화: 책 가시성 높이기']]
+        ai: '지금 바꿔볼 수 있는 환경이 있다면요?',
+        choices: [['자기 전 폰을 침대 밖에 두고 싶어요','자기 전 폰을 침대 밖에 두고 싶었다'],['책상 위에 책을 올려두고 싶어요','책상 위에 책을 올려두고 싶었다']]
       }
     };
     const cfg = configs[type];
@@ -799,30 +819,60 @@
     });
   }
 
-  function dChoice2(btn, label, note) {
+  function dChoice2(btn, label, diaryLine2) {
     document.querySelectorAll('.d-choice').forEach(b => b.disabled = true);
     dSetAction('');
     dAddUser(label);
-    dAddAI('딱 맞아요! 그 한 가지가 새로운 정체성의 첫 증거가 됩니다 ✨').then(() => {
+    dAddAI('이야기해줘서 고마워요 😊 대화 내용을 일기로 정리해드릴게요.').then(() => {
       setTimeout(() => {
         const chat = document.getElementById('dChat');
+        const now = new Date();
+        const dateStr = (now.getMonth()+1) + '월 ' + now.getDate() + '일';
+        const line1 = '오늘 읽으면서 가장 기억에 남은 건 ' + dStep1Text + ' 부분이었다.';
+        const line2 = diaryLine2 + '.';
+        const tags = genDTags(dStep1Text + ' ' + diaryLine2);
         const noteEl = document.createElement('div');
-        noteEl.className = 'd-note-card';
-        noteEl.innerHTML = `<div class="d-note-title">✨ 자동 생성된 나의 독서 노트</div>
-          <div class="d-note-row">📌 핵심: 작은 행동 → 정체성 변화 → 지속 가능한 습관</div>
-          <div class="d-note-row">🔗 나의 연결: ${note}</div>
-          <div class="d-note-row">🎯 적용: 오늘부터 2분 규칙 시작</div>`;
+        noteEl.setAttribute('style', [
+          'background:#0d1f3c',
+          'border:1.5px solid #3b82f6',
+          'border-radius:14px',
+          'padding:16px',
+          'margin-top:6px',
+          'animation:dBubbleIn .4s ease'
+        ].join(';'));
+        const tagHTML = tags.map(t =>
+          '<span style="display:inline-block;background:rgba(37,99,235,0.3);border:1px solid #3b82f6;color:#93c5fd;font-size:11px;padding:2px 9px;border-radius:20px;margin:2px 2px 0 0">' + t + '</span>'
+        ).join('');
+        noteEl.innerHTML = [
+          '<div style="font-size:11px;font-weight:700;color:#60a5fa;margin-bottom:8px">📅 ' + dateStr + ' &nbsp;·&nbsp; 아토믹 해빗 3장</div>',
+          '<div style="height:1px;background:rgba(96,165,250,0.25);margin-bottom:12px"></div>',
+          '<div style="font-size:13px;color:#e2e8f0;line-height:1.85;margin-bottom:8px">' + line1 + '</div>',
+          '<div style="font-size:13px;color:#e2e8f0;line-height:1.85;margin-bottom:12px">' + line2 + '</div>',
+          '<div>' + tagHTML + '</div>'
+        ].join('');
         chat.appendChild(noteEl);
         chat.scrollTop = chat.scrollHeight;
         setTimeout(() => {
           dSetAction(`<div class="d-final-wrap">
-            <p>대화 2분 만에 이런 노트가 자동으로 생성됩니다.</p>
+            <p>대화 2분 만에 나만의 독서 일기가 만들어집니다.</p>
             <a href="prototype.html" class="d-final-cta">📱 전체 앱 체험하기</a>
           </div>
           <div class="d-restart" onclick="dReset()">↺ 다시 체험해보기</div>`);
         }, 400);
       }, 600);
     });
+  }
+
+  function genDTags(text) {
+    const t = text.toLowerCase();
+    const tags = [];
+    if (t.includes('운동') || t.includes('헬스')) tags.push('운동루틴');
+    if (t.includes('습관') || t.includes('시작')) tags.push('습관형성');
+    if (t.includes('독서') || t.includes('책')) tags.push('독서습관');
+    if (t.includes('환경') || t.includes('폰')) tags.push('환경설계');
+    if (t.includes('정체성')) tags.push('정체성');
+    if (!tags.length) tags.push('습관형성');
+    return tags.slice(0, 3);
   }
 
   function dReset() {
