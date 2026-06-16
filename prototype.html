@@ -279,6 +279,17 @@
     .diary-tags { display: flex; flex-wrap: wrap; gap: 6px; padding-left: 28px; position: relative; z-index: 1; }
     .diary-tag { background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.3); color: #93c5fd; font-size: 11px; padding: 3px 10px; border-radius: 100px; }
 
+    /* ── Improve box ── */
+    .improve-box {
+      margin: 0 16px 14px;
+      background: rgba(250,204,21,0.07);
+      border: 1px solid rgba(250,204,21,0.22);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+    .improve-lbl { font-size: 10px; font-weight: 700; color: #fbbf24; letter-spacing: 0.8px; margin-bottom: 7px; }
+    .improve-body { font-size: 14px; color: rgba(255,255,255,0.82); line-height: 1.7; }
+
     /* Side (desktop) */
     .side-info { position: fixed; right: calc(50% - 195px - 180px); top: 50%; transform: translateY(-50%); max-width: 160px; }
     .side-logo { font-size: 20px; font-weight: 800; color: rgba(255,255,255,0.9); margin-bottom: 8px; }
@@ -496,6 +507,11 @@
         <div class="diary-line-deco"></div>
         <div class="diary-body" id="nJournal">—</div>
         <div class="diary-tags" id="nTags"></div>
+      </div>
+      <!-- 개선 포인트 -->
+      <div class="improve-box" id="nImprove" style="display:none">
+        <div class="improve-lbl">💡 한 가지 바꿔본다면</div>
+        <div class="improve-body" id="nImproveBody">—</div>
       </div>
 
       <div class="review-pill">
@@ -761,14 +777,19 @@
   }
 
   function genWrapUp(t1, t2) {
-    const combined = (t1+' '+t2).toLowerCase();
-    if (combined.includes('운동') || combined.includes('헬스'))
-      return '운동 습관, 오늘 읽은 내용으로 다시 설계해볼 수 있을 것 같아요 💪<br>바로 노트로 남겨드릴게요!';
-    if (combined.includes('독서') || combined.includes('책'))
-      return '독서 습관을 더 단단히 만드는 방향으로 정리해드릴게요 📚<br>노트 생성 중이에요!';
-    if (combined.includes('포기') || combined.includes('빠지') || combined.includes('실패'))
-      return '그 경험이 오늘 챕터와 정확히 맞닿아 있어요. 실패가 아니라 구조가 없었던 거예요 ✨<br>노트 정리해드릴게요!';
-    return '정말 솔직한 연결이에요 ✨ 그 생각 그대로 노트에 담아드릴게요!';
+    const c = (t1+' '+t2).toLowerCase();
+    // "생각 확장" 순간 — t1(읽은 내용)과 t2(내 경험)를 연결해서 새로운 시각을 제시
+    if ((c.includes('운동') || c.includes('헬스')) && (c.includes('즉각') || c.includes('보상')))
+      return '재밌네요 — 헬스장을 꾸준히 못 갔던 건 의지가 약해서가 아니라,<br>즉각적인 보람이 없었기 때문일 수 있겠어요.<br>오늘 읽은 내용이 그 이유를 설명해주는 것 같아요 ✨';
+    if (c.includes('운동') || c.includes('헬스'))
+      return '운동을 못 이어간 게 게으름이 아니었을 수 있어요.<br>오늘 읽은 내용이 그 구조적 이유를 설명해주거든요 ✨<br>노트로 남겨드릴게요!';
+    if (c.includes('독서') || c.includes('책'))
+      return '독서가 쌓이지 않는 건 집중력 문제가 아니에요.<br>읽고 나서 생각을 꺼내는 과정이 없었던 거예요 — 지금 이 대화처럼요 ✨';
+    if (c.includes('포기') || c.includes('빠지') || c.includes('흐지부지'))
+      return '두 번 빠진 게 실패가 아니에요.<br>한 번 빠진 뒤 어떻게 돌아오는지가 습관의 진짜 구조예요 ✨<br>그 생각 그대로 노트에 담아드릴게요!';
+    if (c.includes('아침') || c.includes('루틴'))
+      return '아침 루틴이 안 되는 건 의지 문제가 아니라<br>신호 설계가 없었기 때문일 수 있어요.<br>오늘 읽은 내용이 딱 그 얘기거든요 ✨';
+    return '읽는 것보다 지금 이 대화가 더 오래 기억될 거예요 ✨<br>나눠준 생각 그대로 노트로 남겨드릴게요!';
   }
 
 
@@ -803,6 +824,25 @@
       .replace(/요$/, '');
   }
 
+  function genSuggestion(t1, t2) {
+    const c = (t1 + ' ' + t2).toLowerCase();
+    if (c.includes('헬스') || (c.includes('운동') && !c.includes('운동하는')))
+      return '운동 직후 즐거운 것 하나를 바로 연결해보세요. 좋아하는 음료 한 잔처럼 작은 것도 충분해요.';
+    if (c.includes('흐지부지') || c.includes('빠지') || c.includes('포기'))
+      return '다음에 빠지게 되면 죄책감 대신 "한 번은 괜찮아, 두 번은 안 돼"를 기억해보세요.';
+    if (c.includes('독서') || c.includes('책'))
+      return '거창한 독서 계획보다 "오늘 딱 5분"으로 시작해보세요. 가장 작은 단위로 줄이면 지속하기 훨씬 쉬워요.';
+    if (c.includes('아침') || c.includes('루틴'))
+      return '아침 루틴을 이미 하는 습관 바로 뒤에 붙여보세요. 새로 만드는 것보다 훨씬 쉬워요.';
+    if (c.includes('환경') || c.includes('폰'))
+      return '오늘 당장 환경 하나만 바꿔보세요. 폰 위치나 책 위치처럼 눈에 보이는 것부터요.';
+    if (c.includes('정체성') || c.includes('되고 싶') || c.includes('운동하는') || c.includes('독서가'))
+      return '오늘부터 "나는 ___하는 사람이야"를 하루에 한 번 말해보세요. 정체성은 선언에서 시작돼요.';
+    if (c.includes('작은') || c.includes('1%') || c.includes('습관'))
+      return '지금 하고 싶은 습관을 2분 안에 끝낼 수 있는 크기로 줄여보세요. 시작이 쌓여서 루틴이 돼요.';
+    return '오늘 읽은 내용 중 딱 하나만 골라서 내일 직접 해보세요. 읽는 것보다 해보는 게 더 오래 남아요.';
+  }
+
   function buildNote() {
     const t1 = userTurns[0]||'', t2 = userTurns[1]||'';
     const ch = getChData();
@@ -822,6 +862,10 @@
     }
     document.getElementById('nJournal').textContent = lines.join('\n\n') || '—';
     document.getElementById('nTags').innerHTML = genTags(t1,t2).map(t=>`<span class="diary-tag">${t}</span>`).join('');
+    // 개선 포인트
+    const sugg = genSuggestion(t1, t2);
+    document.getElementById('nImproveBody').textContent = sugg;
+    document.getElementById('nImprove').style.display = 'block';
     document.getElementById('noteChLbl').textContent = currentTab==='page' ? range : ch.title;
     const n = new Date();
     document.getElementById('noteDate').textContent = (n.getMonth()+1)+'월 '+n.getDate()+'일';
@@ -864,6 +908,7 @@
     document.getElementById('ch3default').classList.add('selected');
     document.getElementById('chatMsgs').innerHTML='';
     document.getElementById('suggArea').innerHTML='';
+    document.getElementById('nImprove').style.display='none';
     goTo(0);
   }
 

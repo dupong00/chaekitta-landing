@@ -141,7 +141,7 @@
     .outcome-inner { max-width: 1100px; margin: 0 auto; }
     .outcome-section .section-tag { background: rgba(37,99,235,0.2); color: #60a5fa; }
     .outcome-section h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; letter-spacing: -1px; margin-bottom: 56px; color: #fff; }
-    .outcome-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .outcome-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
     .outcome-card { border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 36px; background: rgba(255,255,255,0.03); transition: border-color .2s, transform .2s; }
     .outcome-card:hover { border-color: rgba(37,99,235,0.5); transform: translateY(-4px); }
     .outcome-before { font-size: 13px; color: rgba(255,255,255,0.35); margin-bottom: 16px; line-height: 1.5; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -280,7 +280,7 @@
       .flow-section { padding: 60px 24px; }
       .flow-grid { grid-template-columns: 1fr; gap: 40px; }
       .outcome-section { padding: 60px 24px; }
-      .outcome-grid { grid-template-columns: 1fr; }
+      .outcome-grid { grid-template-columns: 1fr; gap: 16px; }
       .quotes-section { padding: 60px 24px; }
       .quotes-grid { grid-template-columns: 1fr; }
       .faq-section { padding: 60px 24px; }
@@ -314,7 +314,7 @@
   <div class="chip">자동 노트 정리</div>
   <div class="chip">망각곡선 복습</div>
   <div class="chip">읽은 책 기억하기</div>
-  <div class="chip">2분 독서 대화</div>
+  <div class="chip">5분 독서 대화</div>
   <div class="chip">지식 쌓기</div>
   <div class="hero-layout">
     <div class="hero-inner">
@@ -347,9 +347,8 @@
           <div class="phone-bubble user">작은 습관부터 시작하라는 부분이요. 운동을 매일 하려다 실패해서...</div>
           <div class="phone-note">
             <div class="phone-note-title">✨ 자동 생성된 노트</div>
-            <div class="phone-note-item">핵심: 작은 습관 → 정체성 변화</div>
-            <div class="phone-note-item">나의 연결: 운동 루틴 실패 경험</div>
-            <div class="phone-note-item">적용: 2분 규칙부터 시작</div>
+            <div class="phone-note-title">오늘 읽으면서 가장 기억에 남은 건 작은 습관부터 시작하라는 부분 부분이었다.<br>
+              헬스장을 꾸준히 못 간 적 있었다.</div>"
           </div>
         </div>
       </div>
@@ -495,7 +494,8 @@
         <div class="flow-arrow">↓</div>
         <div class="flow-card">
           <div class="flow-card-label">✨ 자동 생성된 노트</div>
-          <div class="flow-card-text">핵심: 작은 습관 → 정체성 변화 / 나의 연결: 운동 루틴 실패 경험 / 적용: 2분 규칙부터</div>
+          <div class="flow-card-text">오늘 읽으면서 가장 기억에 남은 건 작은 습관부터 시작하라는 부분 부분이었다.<br>
+              헬스장을 꾸준히 못 간 적 있었다.</div>"
         </div>
       </div>
     </div>
@@ -540,12 +540,16 @@
         <div class="outcome-after">3개월 전 책의 핵심 3줄을 바로 말할 수 있다</div>
       </div>
       <div class="outcome-card reveal d2">
+        <div class="outcome-before">막연히 좋았던 것 같은데, 왜 좋았는지 모른다</div>
+        <div class="outcome-after">읽기 전엔 몰랐던 내 생각을 대화 중에 발견한다</div>
+      </div>
+      <div class="outcome-card reveal d3">
         <div class="outcome-before">연간 15권 읽었지만 써먹은 건 없음</div>
         <div class="outcome-after">읽은 책이 대화·글쓰기·업무에 실제로 등장한다</div>
       </div>
-      <div class="outcome-card reveal d3">
+      <div class="outcome-card reveal d4">
         <div class="outcome-before">독서 노트 쓰려다 포기, 흰 페이지만</div>
-        <div class="outcome-after">책 덮자마자 2분 대화로 노트가 완성돼 있다</div>
+        <div class="outcome-after">책 덮자마자 5분 대화로 노트가 완성돼 있다</div>
       </div>
     </div>
   </div>
@@ -557,8 +561,8 @@
   <div class="features-grid">
     <div class="feature-card reveal scale d1">
       <div class="feature-icon">💬</div>
-      <h3>AI가 먼저 질문합니다</h3>
-      <p>정리하려 하지 않아도 됩니다. AI가 먼저 물어보면 자연스럽게 생각을 꺼내게 됩니다. 이 과정 자체가 기억을 굳힙니다.</p>
+      <h3>읽기 전엔 몰랐던 생각을 꺼냅니다</h3>
+      <p>AI가 먼저 물어봅니다. 대답하다 보면 내가 왜 그 부분에 끌렸는지, 내 삶의 어디와 연결되는지 자연스럽게 발견하게 됩니다.</p>
     </div>
     <div class="feature-card reveal scale d2">
       <div class="feature-icon">📄</div>
@@ -800,7 +804,7 @@
     dAddUser(text);
     const configs = {
       habit: {
-        ai: '운동을 매일 하려다 실패한 경험이 있으신가요?',
+        ai: '최근에 꾸준히 하려다 잘 안 된 경험이 있으신가요?',
         choices: [['헬스장을 꾸준히 못 간 적 있어요','헬스장을 꾸준히 못 간 적 있었다'],['독서 계획이 흐지부지된 적 있어요','독서 계획이 흐지부지된 적 있었다']]
       },
       identity: {
@@ -820,11 +824,27 @@
     });
   }
 
+  function genDInsight(t1, t2) {
+    const c = (t1 + ' ' + t2).toLowerCase();
+    if (c.includes('운동') || c.includes('헬스'))
+      return '운동을 못 이어간 게 의지 문제가 아니었을 수 있어요.<br>즉각적인 보람이 없었던 게 진짜 이유일 수 있거든요 ✨';
+    if (c.includes('독서') || c.includes('계획') || c.includes('흐지부지'))
+      return '독서 계획이 흐지부지된 건 집중력 탓이 아니에요.<br>읽고 나서 생각을 꺼내는 과정이 없었던 거예요 — 지금 이 대화처럼요 ✨';
+    if (c.includes('환경') || c.includes('폰') || c.includes('책상'))
+      return '환경 하나 바꾸는 게 의지력 100번보다 강할 수 있어요.<br>오늘 읽은 내용이 딱 그 얘기였죠 ✨';
+    if (c.includes('정체성') || c.includes('운동하는') || c.includes('독서가'))
+      return '흥미롭네요 — 그 정체성을 먼저 정하면<br>행동이 선택이 아니라 자연스러운 흐름이 돼요 ✨';
+    return '읽는 것보다 지금 이 대화가 더 오래 기억될 거예요 ✨';
+  }
+
   function dChoice2(btn, label, diaryLine2) {
     document.querySelectorAll('.d-choice').forEach(b => b.disabled = true);
     dSetAction('');
     dAddUser(label);
-    dAddAI('이야기해줘서 고마워요 😊 대화 내용을 일기로 정리해드릴게요.').then(() => {
+    const insight = genDInsight(dStep1Text, label);
+    dAddAI(insight).then(() => {
+      return dAddAI('대화 내용을 일기로 정리해드릴게요 😊');
+    }).then(() => {
       setTimeout(() => {
         const chat = document.getElementById('dChat');
         const now = new Date();
@@ -844,24 +864,44 @@
         const tagHTML = tags.map(t =>
           '<span style="display:inline-block;background:rgba(37,99,235,0.3);border:1px solid #3b82f6;color:#93c5fd;font-size:11px;padding:2px 9px;border-radius:20px;margin:2px 2px 0 0">' + t + '</span>'
         ).join('');
+        const improve = genDSuggestion(dStep1Text, label);
         noteEl.innerHTML = [
           '<div style="font-size:11px;font-weight:700;color:#60a5fa;margin-bottom:8px">📅 ' + dateStr + ' &nbsp;·&nbsp; 아토믹 해빗 3장</div>',
           '<div style="height:1px;background:rgba(96,165,250,0.25);margin-bottom:12px"></div>',
           '<div style="font-size:13px;color:#e2e8f0;line-height:1.85;margin-bottom:8px">' + line1 + '</div>',
           '<div style="font-size:13px;color:#e2e8f0;line-height:1.85;margin-bottom:12px">' + line2 + '</div>',
-          '<div>' + tagHTML + '</div>'
+          '<div>' + tagHTML + '</div>',
+          '<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(250,204,21,0.2)">',
+            '<div style="font-size:10px;font-weight:700;color:#fbbf24;letter-spacing:0.8px;margin-bottom:6px">💡 한 가지 바꿔본다면</div>',
+            '<div style="font-size:12.5px;color:#e2e8f0;line-height:1.7">' + improve + '</div>',
+          '</div>'
         ].join('');
         chat.appendChild(noteEl);
         chat.scrollTop = chat.scrollHeight;
         setTimeout(() => {
           dSetAction(`<div class="d-final-wrap">
-            <p>대화 2분 만에 나만의 독서 일기가 만들어집니다.</p>
+            <p>대화 5분 만에 나만의 독서 일기가 만들어집니다.</p>
             <a href="prototype.html" class="d-final-cta">📱 전체 앱 체험하기</a>
           </div>
           <div class="d-restart" onclick="dReset()">↺ 다시 체험해보기</div>`);
         }, 400);
       }, 600);
     });
+  }
+
+  function genDSuggestion(t1, t2) {
+    const c = (t1 + ' ' + t2).toLowerCase();
+    if (c.includes('헬스') || (c.includes('운동') && !c.includes('운동하는')))
+      return '운동 직후 즐거운 것 하나를 바로 연결해보세요. 좋아하는 음료 한 잔처럼 작은 것도 충분해요.';
+    if (c.includes('흐지부지') || (c.includes('독서') && c.includes('계획')))
+      return '거창한 계획보다 "오늘 딱 5분"으로 시작해보세요. 가장 작은 단위로 줄이면 지속하기 훨씬 쉬워요.';
+    if (c.includes('환경') || c.includes('폰') || c.includes('책상'))
+      return '오늘 당장 환경 하나만 바꿔보세요. 폰 위치나 책 위치처럼 눈에 보이는 것부터요.';
+    if (c.includes('독서가') || c.includes('운동하는') || c.includes('정체성') || c.includes('되고 싶'))
+      return '오늘부터 "나는 ___하는 사람이야"를 하루에 한 번 말해보세요. 정체성은 선언에서 시작돼요.';
+    if (c.includes('습관') || c.includes('작은'))
+      return '지금 하고 싶은 습관을 2분 안에 끝낼 수 있는 크기로 줄여보세요. 시작이 쌓여서 루틴이 돼요.';
+    return '오늘 읽은 내용 중 딱 하나만 골라서 내일 직접 해보세요. 읽는 것보다 해보는 게 더 오래 남아요.';
   }
 
   function genDTags(text) {
