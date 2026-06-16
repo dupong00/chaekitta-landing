@@ -270,11 +270,12 @@
     .d-restart:hover { color: rgba(255,255,255,0.6); }
 
     @media (max-width: 900px) {
+      .chip { display: none; }
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
       .hero { padding: 100px 24px 60px; }
-      .hero-layout { grid-template-columns: 1fr; gap: 48px; }
-      .phone-mockup { display: none; }
+      .hero-layout { grid-template-columns: 1fr; gap: 32px; }
+      .phone-mockup { display: flex; justify-content: center; transform: scale(0.72); transform-origin: top center; margin-bottom: -80px; }
       .section { padding: 60px 24px; }
       .flow-section { padding: 60px 24px; }
       .flow-grid { grid-template-columns: 1fr; gap: 40px; }
