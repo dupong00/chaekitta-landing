@@ -672,7 +672,16 @@
     e.preventDefault();
     if (alreadySigned()) { showAlreadyMsg(source === 'cta' ? 'cta-form-wrap' : 'hero-form-wrap'); return; }
     const form = e.target;
-    const email = form.querySelector('input[type="email"]').value;
+    const input = form.querySelector('input[type="email"]');
+    const email = input.value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!emailRegex.test(email)) {
+      input.style.borderColor = '#f87171';
+      input.placeholder = '올바른 이메일을 입력해주세요';
+      input.value = '';
+      setTimeout(() => { input.style.borderColor = ''; input.placeholder = '이메일 주소를 입력하세요'; }, 2500);
+      return;
+    }
     fetch(APPS_SCRIPT_URL, {
       method: 'POST', mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
