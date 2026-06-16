@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>책잇다 — 앱 체험하기</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #0f172a; --card: #1e293b; --accent: #2563eb; --accent2: #3b82f6;
+      --text: rgba(255,255,255,0.92); --dim: rgba(255,255,255,0.5); --border: rgba(255,255,255,0.09);
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+      background: #080d1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100%;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Phone shell (desktop) */
+    .shell {
+      width: 390px;
+      height: 844px;
+      background: var(--bg);
+      border-radius: 52px;
+      border: 10px solid #1a2540;
+      box-shadow:
+        0 0 0 1.5px #2a3a60,
+        0 60px 120px rgba(0,0,0,0.7),
+        inset 0 0 0 1px rgba(255,255,255,0.04);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Status bar */
+    .sbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 28px 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+    .sbar-right { display: flex; gap: 5px; align-items: center; }
+    .sbar-dot { width: 4px; height: 4px; background: var(--text); border-radius: 50%; }
+
+    /* Screens container */
+    .screens {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.38s cubic-bezier(0.4,0,0.2,1), opacity 0.38s ease;
+      overflow: hidden;
+    }
+    .screen.out-right { transform: translateX(100%); opacity: 0; pointer-events: none; }
+    .screen.out-left  { transform: translateX(-28%); opacity: 0; pointer-events: none; }
+
+    /* ─── SCREEN 0: Splash ─── */
+    #s0 {
+      background: linear-gradient(160deg, #08102a 0%, #0f2060 55%, #08102a 100%);
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 32px;
+      gap: 0;
+    }
+    .splash-glow {
+      position: absolute;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(37,99,235,0.35) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .splash-logo { font-size: 52px; margin-bottom: 20px; position: relative; z-index: 1; }
+    .splash-title { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: -1px; margin-bottom: 10px; position: relative; z-index: 1; }
+    .splash-sub { font-size: 14px; color: var(--dim); line-height: 1.65; margin-bottom: 36px; position: relative; z-index: 1; }
+    .live-badge {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(37,99,235,0.28); border: 1px solid rgba(37,99,235,0.45);
+      color: #93c5fd; font-size: 12px; font-weight: 700;
+      padding: 6px 16px; border-radius: 100px;
+      margin-bottom: 40px; position: relative; z-index: 1;
+    }
+    .live-dot { width: 6px; height: 6px; background: #60a5fa; border-radius: 50%; animation: ldot 2s infinite; }
+    @keyframes ldot { 0%,100%{opacity:1} 50%{opacity:0.25} }
+    .big-btn {
+      width: 100%; background: var(--accent); color: #fff;
+      padding: 17px; border: none; border-radius: 16px;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      transition: all .18s; position: relative; z-index: 1;
+      box-shadow: 0 8px 24px rgba(37,99,235,0.4);
+    }
+    .big-btn:active { transform: scale(0.97); }
+    .splash-note { font-size: 12px; color: rgba(255,255,255,0.25); margin-top: 14px; position: relative; z-index: 1; }
+
+    /* ─── SCREEN 1: Bookshelf ─── */
+    #s1 { background: var(--bg); }
+    .s-header { padding: 16px 20px 14px; flex-shrink: 0; }
+    .s-title { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+    .s-title em { font-style: normal; color: #60a5fa; }
+    .s-sub { font-size: 13px; color: var(--dim); margin-top: 4px; }
+    .shelf-section-label {
+      font-size: 10px; font-weight: 700; color: var(--dim);
+      letter-spacing: 1.2px; padding: 0 20px; margin-bottom: 10px;
+    }
+    .book-card {
+      margin: 0 16px 10px;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 18px; padding: 18px;
+      display: flex; gap: 16px;
+      cursor: pointer;
+      transition: all .2s;
+      position: relative;
+    }
+    .book-card:active { transform: scale(0.985); }
+    .book-card:hover, .book-card:active { border-color: rgba(59,130,246,0.45); }
+    .book-card-new-badge {
+      position: absolute; top: 14px; right: 14px;
+      background: #22c55e; color: #fff;
+      font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 100px;
+    }
+    .bcover {
+      width: 60px; height: 80px;
+      border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0;
+      box-shadow: 3px 3px 12px rgba(0,0,0,0.35);
+    }
+    .bcover.atomic { background: linear-gradient(150deg, #2563eb, #1e40af); }
+    .bcover.power { background: linear-gradient(150deg, #7c3aed, #4c1d95); }
+    .b-status { font-size: 10px; font-weight: 700; color: #93c5fd; margin-bottom: 6px; }
+    .b-name { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+    .b-author { font-size: 12px; color: var(--dim); margin-bottom: 10px; }
+    .b-bar { height: 3px; background: rgba(255,255,255,0.08); border-radius: 100px; margin-bottom: 4px; }
+    .b-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+    .b-prog { font-size: 11px; color: var(--dim); }
+    .shelf-hint {
+      text-align: center; padding: 16px 20px 20px;
+      font-size: 13px; color: var(--dim); line-height: 1.6;
+    }
+    .shelf-hint span { color: #60a5fa; }
+
+    /* ─── SCREEN 2: Chapter Check ─── */
+    #s2 { background: var(--bg); }
+    .s-nav {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px 10px; flex-shrink: 0;
+    }
+    .nav-back {
+      width: 34px; height: 34px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%; border: none;
+      color: var(--text); font-size: 15px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .18s;
+    }
+    .nav-back:hover { background: rgba(255,255,255,0.12); }
+    .nav-ttl { font-size: 15px; font-weight: 700; color: #fff; }
+    .chapter-hero {
+      margin: 4px 16px 20px;
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      border-radius: 20px; padding: 22px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .chapter-cover-sm {
+      width: 52px; height: 68px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .ch-book { font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 2px; }
+    .ch-num { font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 6px; }
+    .ch-title { font-size: 16px; font-weight: 800; color: #fff; }
+    .q-box { padding: 0 16px; }
+    .q-title { font-size: 21px; font-weight: 800; color: #fff; line-height: 1.35; margin-bottom: 10px; }
+    .q-desc { font-size: 14px; color: var(--dim); line-height: 1.65; margin-bottom: 28px; }
+    .q-btns { display: flex; gap: 10px; margin-bottom: 20px; }
+    .q-yes, .q-no {
+      flex: 1; padding: 15px; border-radius: 14px;
+      font-size: 15px; font-weight: 700; cursor: pointer; transition: all .18s; border: none;
+    }
+    .q-yes { background: var(--accent); color: #fff; box-shadow: 0 4px 16px rgba(37,99,235,0.35); }
+    .q-yes:active { transform: scale(0.97); }
+    .q-no { background: rgba(255,255,255,0.07); color: var(--dim); border: 1.5px solid var(--border); }
+    .tip-card {
+      background: rgba(96,165,250,0.07);
+      border: 1px solid rgba(96,165,250,0.18);
+      border-radius: 14px; padding: 14px 16px;
+      font-size: 13px; color: var(--dim); line-height: 1.65;
+    }
+    .tip-card strong { color: #60a5fa; }
+
+    /* ─── SCREEN 3: AI Chat ─── */
+    #s3 { background: var(--bg); }
+    .chat-header {
+      padding: 12px 16px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+    }
+    .ai-av {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, #2563eb, #60a5fa);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-size: 18px; flex-shrink: 0;
+    }
+    .ai-name { font-size: 14px; font-weight: 700; color: #fff; }
+    .ai-online { font-size: 11px; color: #60a5fa; margin-top: 1px; }
+    .chat-book-pill {
+      margin-left: auto;
+      background: rgba(37,99,235,0.2); border: 1px solid rgba(37,99,235,0.3);
+      color: #93c5fd; font-size: 10px; font-weight: 700;
+      padding: 4px 10px; border-radius: 100px;
+    }
+    .chat-msgs {
+      flex: 1; overflow-y: auto; padding: 14px 14px 4px;
+      display: flex; flex-direction: column; gap: 9px;
+    }
+    .chat-msgs::-webkit-scrollbar { display: none; }
+    .cb {
+      max-width: 86%; border-radius: 16px;
+      padding: 11px 14px; font-size: 14px; line-height: 1.6;
+      animation: cbIn .28s ease;
+    }
+    @keyframes cbIn { from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none} }
+    .cb.ai {
+      background: rgba(37,99,235,0.26);
+      border: 1px solid rgba(37,99,235,0.35);
+      color: rgba(255,255,255,0.93);
+      align-self: flex-start;
+    }
+    .cb.user {
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.85);
+      align-self: flex-end;
+    }
+    .cb-label { font-size: 9px; font-weight: 700; opacity: 0.5; margin-bottom: 3px; letter-spacing: 0.5px; }
+    .c-typing-ind {
+      display: flex; align-items: center; gap: 4px;
+      padding: 12px 14px;
+      background: rgba(37,99,235,0.26); border: 1px solid rgba(37,99,235,0.35);
+      border-radius: 16px; align-self: flex-start;
+      animation: cbIn .28s ease;
+    }
+    .ctd { width: 6px; height: 6px; background: rgba(255,255,255,0.45); border-radius: 50%; animation: ctDot 1.2s infinite; }
+    .ctd:nth-child(2){animation-delay:.2s}.ctd:nth-child(3){animation-delay:.4s}
+    @keyframes ctDot{0%,80%,100%{transform:scale(.6);opacity:.3}40%{transform:scale(1);opacity:1}}
+    .chat-input-area {
+      padding: 10px 14px 14px;
+      display: flex; flex-direction: column; gap: 7px;
+      border-top: 1px solid var(--border); flex-shrink: 0;
+    }
+    .c-opt {
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(255,255,255,0.13);
+      color: rgba(255,255,255,0.8);
+      border-radius: 12px; padding: 10px 14px;
+      font-size: 13px; text-align: left; cursor: pointer;
+      transition: all .15s; font-family: inherit;
+    }
+    .c-opt:hover, .c-opt:active { background: rgba(37,99,235,0.3); border-color: rgba(96,165,250,0.45); color: #fff; }
+    .c-opt:disabled { opacity: 0.3; cursor: default; }
+
+    /* ─── SCREEN 4: Note ─── */
+    #s4 { background: var(--bg); overflow-y: auto; }
+    #s4::-webkit-scrollbar { display: none; }
+    .note-top { text-align: center; padding: 20px 20px 16px; }
+    .note-icon { font-size: 48px; animation: notePop .5s cubic-bezier(0.34,1.56,0.64,1) both .1s; }
+    @keyframes notePop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+    .note-ttl { font-size: 21px; font-weight: 800; color: #fff; margin-top: 10px; }
+    .note-stl { font-size: 13px; color: var(--dim); margin-top: 4px; margin-bottom: 4px; }
+    .note-card {
+      margin: 8px 16px 12px;
+      background: rgba(37,99,235,0.1);
+      border: 1px solid rgba(96,165,250,0.22);
+      border-radius: 18px; padding: 18px;
+    }
+    .note-card-hdr {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px; padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .note-bk-mini {
+      width: 30px; height: 40px;
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      border-radius: 5px; display: flex; align-items: center;
+      justify-content: center; font-size: 14px; flex-shrink: 0;
+    }
+    .note-bk-name { font-size: 13px; font-weight: 700; color: #fff; }
+    .note-bk-ch { font-size: 11px; color: var(--dim); margin-top: 2px; }
+    .note-sec { margin-bottom: 14px; }
+    .note-sec-lbl {
+      font-size: 9px; font-weight: 700; color: #60a5fa;
+      letter-spacing: 1.2px; margin-bottom: 6px;
+    }
+    .note-sec-body { font-size: 14px; color: rgba(255,255,255,0.85); line-height: 1.65; }
+    .note-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .note-tag {
+      background: rgba(37,99,235,0.22); border: 1px solid rgba(37,99,235,0.32);
+      color: #93c5fd; font-size: 11px; padding: 3px 10px; border-radius: 100px;
+    }
+    .review-pill {
+      margin: 0 16px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 14px; padding: 13px 16px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .review-pill-icon { font-size: 22px; }
+    .review-pill-text { font-size: 13px; color: var(--dim); line-height: 1.5; }
+    .review-pill-text strong { color: #60a5fa; }
+    .note-actions { padding: 0 16px 20px; display: flex; flex-direction: column; gap: 9px; }
+    .act-pri {
+      background: var(--accent); color: #fff;
+      padding: 16px; border: none; border-radius: 14px;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      text-decoration: none; display: block; text-align: center;
+      transition: all .18s; box-shadow: 0 6px 20px rgba(37,99,235,0.35);
+    }
+    .act-pri:active { transform: scale(0.98); }
+    .act-sec {
+      background: transparent; color: var(--dim);
+      padding: 13px; border: 1.5px solid var(--border);
+      border-radius: 14px; font-size: 14px; cursor: pointer;
+      transition: all .18s; font-family: inherit;
+    }
+    .act-sec:hover { background: rgba(255,255,255,0.04); }
+
+    /* Desktop side label */
+    .side-info {
+      position: fixed; right: calc(50% - 195px - 180px);
+      top: 50%; transform: translateY(-50%);
+      max-width: 160px;
+    }
+    .side-logo { font-size: 20px; font-weight: 800; color: rgba(255,255,255,0.9); margin-bottom: 8px; }
+    .side-desc { font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.7; margin-bottom: 20px; }
+    .side-back { font-size: 13px; color: rgba(255,255,255,0.35); text-decoration: none; display: flex; align-items: center; gap: 5px; }
+    .side-back:hover { color: rgba(255,255,255,0.7); }
+    @media (max-width: 750px) { .side-info { display: none; } }
+
+    /* Mobile full-screen mode */
+    @media (max-width: 500px) {
+      body { align-items: flex-start; justify-content: flex-start; background: var(--bg); }
+      .shell { width: 100vw; height: 100dvh; border-radius: 0; border: none; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="side-info">
+  <div class="side-logo">📚 책잇다</div>
+  <div class="side-desc">읽고 나서 AI와 2분 대화하면<br>기억이 달라집니다.</div>
+  <a class="side-back" href="index.html">← 랜딩 페이지로</a>
+</div>
+
+<div class="shell">
+  <div class="sbar">
+    <span id="sbar-time">9:41</span>
+    <div class="sbar-right">
+      <div class="sbar-dot"></div><div class="sbar-dot"></div><div class="sbar-dot"></div>
+      <span style="font-size:13px;">●●●</span>
+    </div>
+  </div>
+
+  <div class="screens">
+
+    <!-- Screen 0: Splash -->
+    <div class="screen" id="s0">
+      <div class="splash-glow"></div>
+      <div class="splash-logo">📚</div>
+      <div class="splash-title">책잇다</div>
+      <div class="splash-sub">읽은 책이 진짜 내 것이 되는<br>AI 독서 대화 체험</div>
+      <div class="live-badge"><div class="live-dot"></div> 프로토타입 체험</div>
+      <button class="big-btn" onclick="goTo(1)">지금 체험해보기 →</button>
+      <div class="splash-note">실제 데이터를 저장하지 않습니다</div>
+    </div>
+
+    <!-- Screen 1: Bookshelf -->
+    <div class="screen out-right" id="s1">
+      <div class="s-header">
+        <div class="s-title">안녕하세요 <em>👋</em></div>
+        <div class="s-sub">오늘도 읽고 계시는군요!</div>
+      </div>
+      <div class="shelf-section-label">📖 읽는 중</div>
+      <div class="book-card" onclick="goTo(2)">
+        <div class="book-card-new-badge">새 챕터 완료</div>
+        <div class="bcover atomic">📗</div>
+        <div>
+          <div class="b-status">📖 읽는 중</div>
+          <div class="b-name">아토믹 해빗</div>
+          <div class="b-author">제임스 클리어</div>
+          <div class="b-bar"><div class="b-fill" style="width:65%"></div></div>
+          <div class="b-prog">3/5 챕터 · 65% 완료</div>
+        </div>
+      </div>
+      <div class="shelf-section-label" style="margin-top:8px;">📚 읽을 예정</div>
+      <div class="book-card" style="opacity:0.55; cursor:default;">
+        <div class="bcover power">📘</div>
+        <div>
+          <div class="b-status" style="color:var(--dim)">대기 중</div>
+          <div class="b-name">초집중</div>
+          <div class="b-author">니르 이얄</div>
+          <div class="b-bar"><div class="b-fill" style="width:0%"></div></div>
+          <div class="b-prog">아직 시작 전</div>
+        </div>
+      </div>
+      <div class="shelf-hint"><span>아토믹 해빗</span>을 눌러서<br>오늘 읽은 챕터와 대화해보세요</div>
+    </div>
+
+    <!-- Screen 2: Chapter check -->
+    <div class="screen out-right" id="s2">
+      <div class="s-nav">
+        <button class="nav-back" onclick="goTo(1)">←</button>
+        <div class="nav-ttl">아토믹 해빗</div>
+      </div>
+      <div class="chapter-hero">
+        <div class="chapter-cover-sm">📗</div>
+        <div>
+          <div class="ch-book">아토믹 해빗 · 제임스 클리어</div>
+          <div class="ch-num">Chapter 3</div>
+          <div class="ch-title">네 번째 법칙:<br>보상을 만족스럽게</div>
+        </div>
+      </div>
+      <div class="q-box">
+        <div class="q-title">이번 챕터,<br>다 읽으셨나요?</div>
+        <div class="q-desc">읽고 나서 바로 AI와 대화하면<br>기억에 훨씬 오래 남아요.</div>
+        <div class="q-btns">
+          <button class="q-yes" onclick="startChat()">✅ 네, 다 읽었어요</button>
+          <button class="q-no" onclick="goTo(1)">아직요</button>
+        </div>
+        <div class="tip-card">
+          💡 <strong>지금 바로 시작하세요.</strong><br>
+          읽고 1시간 이내에 대화하면 기억 유지율이 3배 높아집니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 3: AI Chat -->
+    <div class="screen out-right" id="s3">
+      <div class="chat-header">
+        <button class="nav-back" onclick="goTo(2)">←</button>
+        <div class="ai-av">🤖</div>
+        <div>
+          <div class="ai-name">책잇다 AI</div>
+          <div class="ai-online">● 대화 중</div>
+        </div>
+        <div class="chat-book-pill">아토믹 해빗 3장</div>
+      </div>
+      <div class="chat-msgs" id="chatMsgs"></div>
+      <div class="chat-input-area" id="chatInput"></div>
+    </div>
+
+    <!-- Screen 4: Note Generated -->
+    <div class="screen out-right" id="s4">
+      <div class="note-top">
+        <div class="note-icon">✨</div>
+        <div class="note-ttl">독서 노트 생성 완료!</div>
+        <div class="note-stl">대화 내용이 자동으로 정리됐어요</div>
+      </div>
+      <div class="note-card">
+        <div class="note-card-hdr">
+          <div class="note-bk-mini">📗</div>
+          <div>
+            <div class="note-bk-name">아토믹 해빗</div>
+            <div class="note-bk-ch">Chapter 3 · 오늘</div>
+          </div>
+        </div>
+        <div class="note-sec">
+          <div class="note-sec-lbl">📌 핵심 개념</div>
+          <div class="note-sec-body" id="note-core">—</div>
+        </div>
+        <div class="note-sec">
+          <div class="note-sec-lbl">🔗 나의 연결</div>
+          <div class="note-sec-body" id="note-conn">—</div>
+        </div>
+        <div class="note-sec">
+          <div class="note-sec-lbl">🎯 적용 계획</div>
+          <div class="note-sec-body" id="note-apply">—</div>
+        </div>
+        <div class="note-sec" style="margin-bottom:0">
+          <div class="note-sec-lbl">🏷 키워드</div>
+          <div class="note-tags" id="note-tags"></div>
+        </div>
+      </div>
+      <div class="review-pill">
+        <div class="review-pill-icon">🔔</div>
+        <div class="review-pill-text">
+          <strong>3일 후</strong>에 이 내용을<br>다시 꺼내드릴게요
+        </div>
+      </div>
+      <div class="note-actions">
+        <a class="act-pri" href="index.html#cta">📚 책잇다 베타 신청하기</a>
+        <button class="act-sec" onclick="resetAll()">↺ 처음부터 다시 체험</button>
+      </div>
+    </div>
+
+  </div><!-- /screens -->
+</div><!-- /shell -->
+
+<script>
+  // Status bar clock
+  function updateClock() {
+    const now = new Date();
+    const h = now.getHours(), m = now.getMinutes();
+    document.getElementById('sbar-time').textContent = h + ':' + String(m).padStart(2,'0');
+  }
+  updateClock();
+  setInterval(updateClock, 10000);
+
+  // Screen navigation
+  let currentScreen = 0;
+  function goTo(n) {
+    const screens = document.querySelectorAll('.screen');
+    screens[currentScreen].classList.add(n > currentScreen ? 'out-left' : 'out-right');
+    screens[currentScreen].classList.remove('out-right', 'out-left');
+    // wait a tick then apply transition class
+    screens[currentScreen].style.transition = 'none';
+    setTimeout(() => {
+      screens[currentScreen].style.transition = '';
+      screens[currentScreen].classList.add(n > currentScreen ? 'out-left' : 'out-right');
+      screens[n].classList.remove('out-right', 'out-left');
+      currentScreen = n;
+    }, 10);
+  }
+
+  // ── Chat logic ──
+  let chatStep = 0;
+  let userChoices = {};
+
+  const CONVERSATIONS = [
+    // Step 1: AI opens
+    {
+      type: 'ai',
+      text: '이번 챕터 다 읽으셨군요! 수고하셨어요 😊<br><br>"보상을 만족스럽게" 챕터에서 가장 마음에 걸린 내용이 있었나요?',
+      choices: [
+        { text: '✋ 즉각적 보상이 중요하다는 부분', key: 'reward' },
+        { text: '🔗 습관 추적의 힘', key: 'tracking' },
+        { text: '🚫 절대 두 번 빠지지 않는 법칙', key: 'never2' }
+      ]
+    },
+    // Step 2: follow-up (depends on choice)
+    {
+      type: 'dynamic'
+    },
+    // Step 3: final AI response + note
+    {
+      type: 'final'
+    }
+  ];
+
+  const FOLLOWUPS = {
+    reward: {
+      ai: '즉각적 보상이 핵심이죠! 지금 하려는 습관 중에 바로 보람을 느끼기 어려운 게 있나요?',
+      choices: [
+        { text: '💪 운동인데, 살이 안 빠지니까요', key: 'exercise' },
+        { text: '📖 독서요, 바로 효과가 없으니', key: 'reading' }
+      ]
+    },
+    tracking: {
+      ai: '습관 추적은 정말 강력한 도구예요! 지금 추적하고 싶은 습관이 있다면요?',
+      choices: [
+        { text: '🌅 아침 루틴', key: 'morning' },
+        { text: '📝 공부 시간', key: 'study' }
+      ]
+    },
+    never2: {
+      ai: '"절대 두 번 빠지지 마라" — 이미 한 번 빠진 경험이 있으신가요?',
+      choices: [
+        { text: '😅 네, 헬스장을 일주일 빠진 적요', key: 'gym' },
+        { text: '📖 독서 계획이 흐지부지됐어요', key: 'book_fail' }
+      ]
+    }
+  };
+
+  const NOTES = {
+    reward_exercise: {
+      core: '즉각적 보상이 습관 유지의 핵심. 운동 후 바로 즐거운 프로틴 쉐이크 한 잔 같은 미시적 보상을 설계하라.',
+      conn: '운동 직후 바로 보람이 없어서 포기했던 경험',
+      apply: '오늘 운동 후 좋아하는 음료 한 잔 마시기',
+      tags: ['즉각보상', '습관설계', '운동루틴']
+    },
+    reward_reading: {
+      core: '독서 후 즉각적 기록(노트 1줄)이 보람을 만든다. 미래의 "지식 쌓임"보다 지금의 작은 승리감이 더 강하다.',
+      conn: '독서 효과가 바로 안 느껴져 흥미가 떨어지던 경험',
+      apply: '챕터 끝날 때마다 핵심 1줄 바로 적기',
+      tags: ['독서보상', '즉각피드백', '습관유지']
+    },
+    tracking_morning: {
+      core: '습관 추적은 습관에 즉각적 보람을 더한다. 체크리스트 체크 자체가 보상이 된다.',
+      conn: '아침 루틴이 들쑥날쑥했던 경험',
+      apply: '내일부터 아침 루틴 체크리스트 앱으로 추적',
+      tags: ['습관추적', '아침루틴', '시각화']
+    },
+    tracking_study: {
+      core: '학습 추적은 "나는 공부하는 사람"이라는 정체성을 강화한다.',
+      conn: '공부 시간이 얼마나 되는지 막연했던 경험',
+      apply: '타이머로 공부 시간 기록, 주간 합계 확인',
+      tags: ['학습추적', '정체성', '시간관리']
+    },
+    never2_gym: {
+      core: '"절대 두 번 빠지지 않기" — 완벽하지 않아도 한 번만 빠지면 괜찮다. 두 번 빠지는 것이 진짜 문제.',
+      conn: '헬스장 일주일 빠지고 포기했던 경험',
+      apply: '빠졌을 때 죄책감 대신 바로 다음날 다시 시작',
+      tags: ['회복력', '습관연속성', '자기용서']
+    },
+    never2_book_fail: {
+      core: '독서 계획 한 번 빠지는 것은 실수, 두 번 빠지는 것이 습관 깨짐의 시작.',
+      conn: '독서 계획 흐지부지됐던 경험',
+      apply: '못 읽은 날 다음날은 반드시 1페이지라도 읽기',
+      tags: ['독서습관', '회복력', '최소행동']
+    }
+  };
+
+  function startChat() {
+    chatStep = 0;
+    userChoices = {};
+    document.getElementById('chatMsgs').innerHTML = '';
+    document.getElementById('chatInput').innerHTML = '';
+    goTo(3);
+    setTimeout(() => addAI(CONVERSATIONS[0].text, () => {
+      showChoices(CONVERSATIONS[0].choices, (key) => {
+        userChoices.step1 = key;
+        const fu = FOLLOWUPS[key];
+        addUser(fu && fu.choices ? CONVERSATIONS[0].choices.find(c => c.key===key).text : '');
+        addAI(fu.ai, () => showChoices(fu.choices, (key2) => {
+          userChoices.step2 = key2;
+          addUser(fu.choices.find(c=>c.key===key2).text);
+          addAI('정말 공감돼요. 그 경험이 오늘 챕터와 딱 맞닿아 있네요 ✨<br><br>노트를 정리해 드릴게요!', () => {
+            setTimeout(() => buildNote(key, key2), 400);
+          });
+        }));
+      });
+    }), 600);
+  }
+
+  function addAI(text, cb) {
+    const msgs = document.getElementById('chatMsgs');
+    const typing = document.createElement('div');
+    typing.className = 'c-typing-ind';
+    typing.innerHTML = '<div class="ctd"></div><div class="ctd"></div><div class="ctd"></div>';
+    msgs.appendChild(typing);
+    msgs.scrollTop = msgs.scrollHeight;
+    setTimeout(() => {
+      msgs.removeChild(typing);
+      const b = document.createElement('div');
+      b.className = 'cb ai';
+      b.innerHTML = '<div class="cb-label">책잇다 AI</div>' + text;
+      msgs.appendChild(b);
+      msgs.scrollTop = msgs.scrollHeight;
+      if (cb) cb();
+    }, 1100);
+  }
+
+  function addUser(text) {
+    const msgs = document.getElementById('chatMsgs');
+    const b = document.createElement('div');
+    b.className = 'cb user';
+    b.innerHTML = '<div class="cb-label">나</div>' + text;
+    msgs.appendChild(b);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function showChoices(choices, onSelect) {
+    const area = document.getElementById('chatInput');
+    area.innerHTML = '';
+    choices.forEach(c => {
+      const btn = document.createElement('button');
+      btn.className = 'c-opt';
+      btn.textContent = c.text;
+      btn.onclick = () => {
+        area.querySelectorAll('.c-opt').forEach(b => b.disabled = true);
+        onSelect(c.key);
+      };
+      area.appendChild(btn);
+    });
+    document.getElementById('chatMsgs').scrollTop = 9999;
+  }
+
+  function buildNote(k1, k2) {
+    const noteKey = k1 + '_' + k2;
+    const note = NOTES[noteKey] || NOTES['reward_exercise'];
+    document.getElementById('note-core').textContent = note.core;
+    document.getElementById('note-conn').textContent = note.conn;
+    document.getElementById('note-apply').textContent = note.apply;
+    const tagEl = document.getElementById('note-tags');
+    tagEl.innerHTML = note.tags.map(t => `<span class="note-tag">${t}</span>`).join('');
+    document.getElementById('chatInput').innerHTML = '';
+    setTimeout(() => goTo(4), 600);
+  }
+
+  function resetAll() {
+    chatStep = 0;
+    userChoices = {};
+    document.getElementById('chatMsgs').innerHTML = '';
+    document.getElementById('chatInput').innerHTML = '';
+    goTo(0);
+  }
+</script>
+</body>
+</html>

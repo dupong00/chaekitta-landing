@@ -187,6 +187,71 @@
     .reveal.d4 { transition-delay: 0.4s; }
     .reveal.d5 { transition-delay: 0.5s; }
 
+    /* Phone mockup sequential animation */
+    @keyframes phoneItemIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .phone-label { animation: phoneItemIn 0.4s ease both 0.5s; }
+    .phone-bubble.ai { animation: phoneItemIn 0.4s ease both 0.9s; }
+    .phone-bubble.user { animation: phoneItemIn 0.4s ease both 1.5s; }
+    .phone-note { animation: phoneItemIn 0.5s ease both 2.1s; }
+
+    /* Pain Check Section */
+    .pain-check-section { background: #f8faff; padding: 80px 48px; border-top: 1px solid var(--gray-light); }
+    .pain-check-inner { max-width: 920px; margin: 0 auto; text-align: center; }
+    .pain-check-section h2 { font-size: clamp(24px, 3.5vw, 40px); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
+    .pain-check-intro { font-size: 16px; color: var(--gray); margin-bottom: 40px; }
+    .pain-check-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 32px; text-align: left; }
+    .pain-check-item { display: flex; align-items: center; gap: 14px; background: #fff; border: 2px solid var(--gray-light); border-radius: 14px; padding: 16px 18px; cursor: pointer; transition: all .2s; font-size: 14px; color: var(--gray-dark); line-height: 1.5; user-select: none; }
+    .pain-check-item:hover { border-color: var(--accent); background: var(--accent-light); }
+    .pain-check-item.checked { border-color: var(--accent); background: var(--accent-light); color: var(--black); font-weight: 600; }
+    .check-box { min-width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--gray-light); display: flex; align-items: center; justify-content: center; font-size: 11px; transition: all .2s; background: #fff; color: transparent; flex-shrink: 0; }
+    .pain-check-item.checked .check-box { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .pain-check-result { padding: 24px 0 4px; transition: all .3s; }
+    .pain-count-row { display: flex; align-items: baseline; justify-content: center; gap: 8px; margin-bottom: 10px; }
+    .pain-count-big { font-size: 56px; font-weight: 800; color: var(--accent); letter-spacing: -3px; line-height: 1; }
+    .pain-count-total { font-size: 18px; color: var(--gray); }
+    .pain-message-text { font-size: 19px; font-weight: 700; color: var(--black); margin-bottom: 8px; }
+    .pain-sub-text { font-size: 15px; color: var(--gray-dark); line-height: 1.65; margin-bottom: 20px; }
+    .pain-cta-btn { display: inline-block; background: var(--accent); color: #fff; padding: 14px 28px; border-radius: 12px; font-size: 15px; font-weight: 700; text-decoration: none; transition: background .2s; }
+    .pain-cta-btn:hover { background: var(--accent-dark); }
+
+    /* Interactive Demo Section */
+    .demo-section { padding: 100px 48px; background: #fff; }
+    .demo-inner { max-width: 860px; margin: 0 auto; }
+    .demo-section-h2 { font-size: clamp(24px, 3.5vw, 40px); font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
+    .demo-intro { font-size: 16px; color: var(--gray-dark); margin-bottom: 48px; }
+    .demo-container { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); border-radius: 24px; padding: 32px; }
+    .demo-book-row { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .book-cover-box { width: 50px; height: 66px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+    .book-title-text { font-size: 15px; font-weight: 700; color: #fff; }
+    .book-author-text { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .book-chapter-tag { display: inline-block; background: rgba(96,165,250,0.2); border: 1px solid rgba(96,165,250,0.3); color: #93c5fd; font-size: 11px; padding: 3px 10px; border-radius: 100px; margin-top: 6px; }
+    .demo-chat-area { min-height: 100px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; max-height: 420px; overflow-y: auto; }
+    .d-bubble { border-radius: 14px; padding: 11px 15px; font-size: 13.5px; line-height: 1.6; max-width: 88%; animation: dBubbleIn .3s ease; }
+    @keyframes dBubbleIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .d-bubble.ai { background: rgba(37,99,235,0.3); border: 1px solid rgba(37,99,235,0.4); color: rgba(255,255,255,0.95); align-self: flex-start; }
+    .d-bubble.user { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.85); align-self: flex-end; }
+    .d-label { font-size: 10px; font-weight: 700; opacity: 0.55; margin-bottom: 4px; letter-spacing: 0.5px; }
+    .d-choices { display: flex; flex-direction: column; gap: 8px; animation: dBubbleIn .3s ease; }
+    .d-choice { background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.18); color: rgba(255,255,255,0.8); border-radius: 10px; padding: 10px 15px; font-size: 13px; text-align: left; cursor: pointer; transition: all .18s; }
+    .d-choice:hover { background: rgba(37,99,235,0.35); border-color: rgba(96,165,250,0.5); color: #fff; }
+    .d-choice:disabled { opacity: 0.4; cursor: default; }
+    .d-typing { display: flex; align-items: center; gap: 5px; padding: 12px 16px; background: rgba(37,99,235,0.3); border: 1px solid rgba(37,99,235,0.4); border-radius: 14px; align-self: flex-start; }
+    .d-typing-dot { width: 6px; height: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; animation: dtDot 1.2s infinite; }
+    .d-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .d-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dtDot { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; } 40% { transform: scale(1); opacity: 1; } }
+    .d-note-card { background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.3); border-radius: 12px; padding: 14px 16px; animation: dBubbleIn .4s ease; margin-top: 4px; }
+    .d-note-title { font-size: 10px; font-weight: 700; color: #93c5fd; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .d-note-row { font-size: 12.5px; color: rgba(255,255,255,0.78); line-height: 1.55; margin-bottom: 4px; }
+    .d-start-btn { width: 100%; background: var(--accent); color: #fff; padding: 14px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .2s; }
+    .d-start-btn:hover { background: var(--accent-dark); }
+    .d-final-wrap { text-align: center; padding: 16px 0 4px; }
+    .d-final-wrap p { font-size: 14px; color: rgba(255,255,255,0.65); margin-bottom: 16px; }
+    .d-final-cta { display: inline-block; background: var(--accent); color: #fff; padding: 13px 26px; border-radius: 12px; font-size: 14px; font-weight: 700; text-decoration: none; transition: background .2s; }
+    .d-final-cta:hover { background: var(--accent-dark); }
+    .d-restart { text-align: center; font-size: 12px; color: rgba(255,255,255,0.35); cursor: pointer; margin-top: 12px; }
+    .d-restart:hover { color: rgba(255,255,255,0.6); }
+
     @media (max-width: 900px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
@@ -207,6 +272,9 @@
       .cta-section { padding: 80px 24px; }
       footer { padding: 32px 24px; }
       .hero-form, .cta-form { flex-direction: column; }
+      .pain-check-section { padding: 60px 24px; }
+      .pain-check-grid { grid-template-columns: 1fr; }
+      .demo-section { padding: 60px 24px; }
     }
   </style>
 </head>
@@ -218,6 +286,7 @@
     <a href="#problem">문제인식</a>
     <a href="#solution">작동방식</a>
     <a href="#outcome">변화</a>
+    <a href="#demo">직접 체험</a>
   </div>
   <a href="#cta" class="nav-cta">베타 신청</a>
 </nav>
@@ -246,6 +315,9 @@
         </form>
         <p class="hero-sub">출시 후 이메일로 알려드려요</p>
       </div>
+      <a href="prototype.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;color:rgba(255,255,255,0.55);font-size:14px;text-decoration:none;transition:color .2s;" onmouseover="this.style.color='rgba(255,255,255,0.85)'" onmouseout="this.style.color='rgba(255,255,255,0.55)'">
+        ▶ 앱 미리 체험해보기
+      </a>
     </div>
     <div class="phone-mockup">
       <div class="phone-glow"></div>
@@ -263,6 +335,50 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pain Check Section -->
+<section class="pain-check-section">
+  <div class="pain-check-inner">
+    <div class="section-tag reveal">Self Check</div>
+    <h2 class="reveal d1">이런 경험, 몇 개나<br>해당되나요?</h2>
+    <p class="pain-check-intro reveal d2">해당하는 항목을 직접 눌러보세요</p>
+    <div class="pain-check-grid reveal d3">
+      <div class="pain-check-item" onclick="togglePainCheck(this)">
+        <div class="check-box">✓</div>
+        <span>📖 완독하고 며칠 뒤, 내용을 제대로 설명 못한 적 있다</span>
+      </div>
+      <div class="pain-check-item" onclick="togglePainCheck(this)">
+        <div class="check-box">✓</div>
+        <span>📝 독서 노트 쓰려다 귀찮아서 그냥 넘어간 적 있다</span>
+      </div>
+      <div class="pain-check-item" onclick="togglePainCheck(this)">
+        <div class="check-box">✓</div>
+        <span>💬 독서 모임에서 내용이 생각 안 나 어색했던 적 있다</span>
+      </div>
+      <div class="pain-check-item" onclick="togglePainCheck(this)">
+        <div class="check-box">✓</div>
+        <span>📚 올해 몇 권 읽었는지 알지만, 그 내용은 기억 안 난다</span>
+      </div>
+      <div class="pain-check-item" onclick="togglePainCheck(this)">
+        <div class="check-box">✓</div>
+        <span>🔖 좋은 구절에 밑줄 쳤는데, 다시 펼쳐본 적 없다</span>
+      </div>
+      <div class="pain-check-item" onclick="togglePainCheck(this)">
+        <div class="check-box">✓</div>
+        <span>😔 읽은 책 내용을 실생활에 적용한 기억이 거의 없다</span>
+      </div>
+    </div>
+    <div class="pain-check-result" id="pain-result" style="display:none;">
+      <div class="pain-count-row">
+        <div class="pain-count-big" id="pain-count-big">0</div>
+        <div class="pain-count-total">/ 6개 해당</div>
+      </div>
+      <div class="pain-message-text" id="pain-msg"></div>
+      <div class="pain-sub-text" id="pain-sub"></div>
+      <a href="#cta" class="pain-cta-btn" id="pain-cta" style="display:none;">책잇다로 해결하기 →</a>
     </div>
   </div>
 </section>
@@ -367,6 +483,34 @@
     </div>
   </div>
 </div>
+
+<!-- Interactive Demo Section -->
+<section class="demo-section" id="demo">
+  <div class="demo-inner">
+    <div class="section-tag reveal">Try It</div>
+    <h2 class="demo-section-h2 reveal d1">직접 체험해보세요</h2>
+    <p class="demo-intro reveal d2">실제 앱과 동일한 AI 대화 흐름을 미리 경험해볼 수 있어요</p>
+    <div class="demo-container reveal d3">
+      <div class="demo-book-row">
+        <div class="book-cover-box">📗</div>
+        <div>
+          <div class="book-title-text">아토믹 해빗</div>
+          <div class="book-author-text">제임스 클리어</div>
+          <span class="book-chapter-tag">3장 읽기 완료 ✓</span>
+        </div>
+      </div>
+      <div class="demo-chat-area" id="dChat"></div>
+      <div id="dAction">
+        <button class="d-start-btn" onclick="dStart()">💬 AI와 대화 시작하기</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:20px;">
+      <a href="prototype.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--accent-light);color:var(--accent);padding:13px 24px;border-radius:12px;font-size:14px;font-weight:700;text-decoration:none;border:1.5px solid rgba(37,99,235,0.25);transition:all .2s;" onmouseover="this.style.background='var(--accent)';this.style.color='#fff'" onmouseout="this.style.background='var(--accent-light)';this.style.color='var(--accent)'">
+        📱 앱 전체 플로우 체험하기 →
+      </a>
+    </div>
+  </div>
+</section>
 
 <div class="outcome-section" id="outcome">
   <div class="outcome-inner">
@@ -555,6 +699,138 @@
     };
     requestAnimationFrame(step);
   }
+  // Pain Check
+  function togglePainCheck(el) {
+    el.classList.toggle('checked');
+    const count = document.querySelectorAll('.pain-check-item.checked').length;
+    const result = document.getElementById('pain-result');
+    const countEl = document.getElementById('pain-count-big');
+    const msgEl = document.getElementById('pain-msg');
+    const subEl = document.getElementById('pain-sub');
+    const ctaEl = document.getElementById('pain-cta');
+    if (count === 0) { result.style.display = 'none'; return; }
+    result.style.display = 'block';
+    countEl.textContent = count;
+    if (count <= 2) {
+      msgEl.textContent = '읽기의 아쉬움을 느끼고 계시는군요.';
+      subEl.textContent = '책잇다가 더 깊이 남길 수 있도록 도와드릴게요.';
+      ctaEl.style.display = 'none';
+    } else if (count <= 4) {
+      msgEl.textContent = '많은 독자분들이 같은 고민을 하고 있어요.';
+      subEl.textContent = '읽는 방법의 문제가 아닙니다. 읽고 난 후의 구조가 없는 것이 문제예요.';
+      ctaEl.style.display = 'inline-block';
+    } else {
+      msgEl.textContent = '책잇다가 꼭 필요한 분이시네요.';
+      subEl.textContent = '이 고민들, 혼자 해결하려고 하지 않아도 됩니다. 구조가 도와줄 수 있어요.';
+      ctaEl.style.display = 'inline-block';
+    }
+  }
+
+  // Interactive Demo
+  let demoActive = false;
+
+  function dAddAI(text) {
+    return new Promise(resolve => {
+      const chat = document.getElementById('dChat');
+      const typing = document.createElement('div');
+      typing.className = 'd-typing';
+      typing.innerHTML = '<div class="d-typing-dot"></div><div class="d-typing-dot"></div><div class="d-typing-dot"></div>';
+      chat.appendChild(typing);
+      chat.scrollTop = chat.scrollHeight;
+      setTimeout(() => {
+        chat.removeChild(typing);
+        const b = document.createElement('div');
+        b.className = 'd-bubble ai';
+        b.innerHTML = '<div class="d-label">책잇다 AI</div>' + text;
+        chat.appendChild(b);
+        chat.scrollTop = chat.scrollHeight;
+        resolve();
+      }, 1100);
+    });
+  }
+
+  function dAddUser(text) {
+    const chat = document.getElementById('dChat');
+    const b = document.createElement('div');
+    b.className = 'd-bubble user';
+    b.innerHTML = '<div class="d-label">나</div>' + text;
+    chat.appendChild(b);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function dSetAction(html) { document.getElementById('dAction').innerHTML = html; }
+
+  function dStart() {
+    if (demoActive) return;
+    demoActive = true;
+    dSetAction('');
+    dAddAI('아토믹 해빗 3장을 다 읽으셨군요! 이번 챕터에서 가장 마음에 걸린 내용이 있었나요?').then(() => {
+      dSetAction(`<div class="d-choices">
+        <button class="d-choice" onclick="dChoice1(this,'작은 습관부터 시작하라는 부분이요. 운동을 매일 하려다 실패해서요.','habit')">✋ 작은 습관부터 시작하라는 부분</button>
+        <button class="d-choice" onclick="dChoice1(this,'정체성 기반으로 습관을 만들어야 한다는 것이요.','identity')">🔑 정체성 기반 습관 만들기</button>
+        <button class="d-choice" onclick="dChoice1(this,'환경 설계가 의지력보다 강력하다는 부분이요.','env')">🌱 환경 설계의 중요성</button>
+      </div>`);
+    });
+  }
+
+  function dChoice1(btn, text, type) {
+    document.querySelectorAll('.d-choice').forEach(b => b.disabled = true);
+    dSetAction('');
+    dAddUser(text);
+    const configs = {
+      habit: {
+        ai: '그 경험, 정말 많은 분들이 공감해요 😊 "2분 규칙"이 나왔는데 — 지금 당장 2분으로 시작할 수 있는 가장 작은 행동이 뭘까요?',
+        choices: [['🏃 스트레칭 2분','운동 루틴 실패 → 스트레칭 2분부터 시작'],['📚 책 한 페이지 읽기','독서 루틴 → 1페이지로 시작']]
+      },
+      identity: {
+        ai: '핵심을 정확히 짚으셨어요! 지금 되고 싶은 사람의 모습이 있다면 어떤 건가요?',
+        choices: [['💪 꾸준히 운동하는 사람','목표 정체성: 운동하는 사람'],['📖 매일 읽는 독서가','목표 정체성: 꾸준히 읽는 독서가']]
+      },
+      env: {
+        ai: '맞아요, 환경이 의지력보다 훨씬 강력하죠. 지금 바꿔볼 수 있는 환경이 있다면요?',
+        choices: [['📵 자기 전 폰 침대 밖에 두기','환경 변화: 폰 위치 바꾸기'],['📗 책상 위에 책 올려두기','환경 변화: 책 가시성 높이기']]
+      }
+    };
+    const cfg = configs[type];
+    dAddAI(cfg.ai).then(() => {
+      dSetAction(`<div class="d-choices">${cfg.choices.map(c =>
+        `<button class="d-choice" onclick="dChoice2(this,'${c[0]}','${c[1]}')">${c[0]}</button>`
+      ).join('')}</div>`);
+    });
+  }
+
+  function dChoice2(btn, label, note) {
+    document.querySelectorAll('.d-choice').forEach(b => b.disabled = true);
+    dSetAction('');
+    dAddUser(label);
+    dAddAI('딱 맞아요! 그 한 가지가 새로운 정체성의 첫 증거가 됩니다 ✨').then(() => {
+      setTimeout(() => {
+        const chat = document.getElementById('dChat');
+        const noteEl = document.createElement('div');
+        noteEl.className = 'd-note-card';
+        noteEl.innerHTML = `<div class="d-note-title">✨ 자동 생성된 나의 독서 노트</div>
+          <div class="d-note-row">📌 핵심: 작은 행동 → 정체성 변화 → 지속 가능한 습관</div>
+          <div class="d-note-row">🔗 나의 연결: ${note}</div>
+          <div class="d-note-row">🎯 적용: 오늘부터 2분 규칙 시작</div>`;
+        chat.appendChild(noteEl);
+        chat.scrollTop = chat.scrollHeight;
+        setTimeout(() => {
+          dSetAction(`<div class="d-final-wrap">
+            <p>대화 2분 만에 이런 노트가 자동으로 생성됩니다.</p>
+            <a href="prototype.html" class="d-final-cta">📱 전체 앱 체험하기</a>
+          </div>
+          <div class="d-restart" onclick="dReset()">↺ 다시 체험해보기</div>`);
+        }, 400);
+      }, 600);
+    });
+  }
+
+  function dReset() {
+    demoActive = false;
+    document.getElementById('dChat').innerHTML = '';
+    dSetAction('<button class="d-start-btn" onclick="dStart()">💬 AI와 대화 시작하기</button>');
+  }
+
   const statsObs = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
